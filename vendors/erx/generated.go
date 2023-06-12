@@ -623,92 +623,124 @@ func ERXSecondaryWins_Del(p *radius.Packet) {
 	_ERX_DelVendor(p, 7)
 }
 
-func ERXTunnelVirtualRouter_Add(p *radius.Packet, value []byte) (err error) {
+func ERXTunnelVirtualRouter_Add(p *radius.Packet, tag byte, value []byte) (err error) {
 	var a radius.Attribute
 	a, err = radius.NewBytes(value)
 	if err != nil {
 		return
 	}
+	if tag <= 0x1F {
+		a = append(radius.Attribute{tag}, a...)
+	}
 	return _ERX_AddVendor(p, 8, a)
 }
 
-func ERXTunnelVirtualRouter_AddString(p *radius.Packet, value string) (err error) {
+func ERXTunnelVirtualRouter_AddString(p *radius.Packet, tag byte, value string) (err error) {
 	var a radius.Attribute
 	a, err = radius.NewString(value)
 	if err != nil {
 		return
 	}
+	if tag <= 0x1F {
+		a = append(radius.Attribute{tag}, a...)
+	}
 	return _ERX_AddVendor(p, 8, a)
 }
 
-func ERXTunnelVirtualRouter_Get(p *radius.Packet) (value []byte) {
-	value, _ = ERXTunnelVirtualRouter_Lookup(p)
+func ERXTunnelVirtualRouter_Get(p *radius.Packet) (tag byte, value []byte) {
+	tag, value, _ = ERXTunnelVirtualRouter_Lookup(p)
 	return
 }
 
-func ERXTunnelVirtualRouter_GetString(p *radius.Packet) (value string) {
-	value, _ = ERXTunnelVirtualRouter_LookupString(p)
+func ERXTunnelVirtualRouter_GetString(p *radius.Packet) (tag byte, value string) {
+	tag, value, _ = ERXTunnelVirtualRouter_LookupString(p)
 	return
 }
 
-func ERXTunnelVirtualRouter_Gets(p *radius.Packet) (values [][]byte, err error) {
+func ERXTunnelVirtualRouter_Gets(p *radius.Packet) (tags []byte, values [][]byte, err error) {
 	var i []byte
 	for _, attr := range _ERX_GetsVendor(p, 8) {
+		var tag byte
+		if len(attr) >= 1 && attr[0] <= 0x1F {
+			tag = attr[0]
+			attr = attr[1:]
+		}
 		i = radius.Bytes(attr)
 		if err != nil {
 			return
 		}
 		values = append(values, i)
+		tags = append(tags, tag)
 	}
 	return
 }
 
-func ERXTunnelVirtualRouter_GetStrings(p *radius.Packet) (values []string, err error) {
+func ERXTunnelVirtualRouter_GetStrings(p *radius.Packet) (tags []byte, values []string, err error) {
 	var i string
 	for _, attr := range _ERX_GetsVendor(p, 8) {
+		var tag byte
+		if len(attr) >= 1 && attr[0] <= 0x1F {
+			tag = attr[0]
+			attr = attr[1:]
+		}
 		i = radius.String(attr)
 		if err != nil {
 			return
 		}
 		values = append(values, i)
+		tags = append(tags, tag)
 	}
 	return
 }
 
-func ERXTunnelVirtualRouter_Lookup(p *radius.Packet) (value []byte, err error) {
+func ERXTunnelVirtualRouter_Lookup(p *radius.Packet) (tag byte, value []byte, err error) {
 	a, ok := _ERX_LookupVendor(p, 8)
 	if !ok {
 		err = radius.ErrNoAttribute
 		return
+	}
+	if len(a) >= 1 && a[0] <= 0x1F {
+		tag = a[0]
+		a = a[1:]
 	}
 	value = radius.Bytes(a)
 	return
 }
 
-func ERXTunnelVirtualRouter_LookupString(p *radius.Packet) (value string, err error) {
+func ERXTunnelVirtualRouter_LookupString(p *radius.Packet) (tag byte, value string, err error) {
 	a, ok := _ERX_LookupVendor(p, 8)
 	if !ok {
 		err = radius.ErrNoAttribute
 		return
 	}
+	if len(a) >= 1 && a[0] <= 0x1F {
+		tag = a[0]
+		a = a[1:]
+	}
 	value = radius.String(a)
 	return
 }
 
-func ERXTunnelVirtualRouter_Set(p *radius.Packet, value []byte) (err error) {
+func ERXTunnelVirtualRouter_Set(p *radius.Packet, tag byte, value []byte) (err error) {
 	var a radius.Attribute
 	a, err = radius.NewBytes(value)
 	if err != nil {
 		return
 	}
+	if tag <= 0x1F {
+		a = append(radius.Attribute{tag}, a...)
+	}
 	return _ERX_SetVendor(p, 8, a)
 }
 
-func ERXTunnelVirtualRouter_SetString(p *radius.Packet, value string) (err error) {
+func ERXTunnelVirtualRouter_SetString(p *radius.Packet, tag byte, value string) (err error) {
 	var a radius.Attribute
 	a, err = radius.NewString(value)
 	if err != nil {
 		return
+	}
+	if tag <= 0x1F {
+		a = append(radius.Attribute{tag}, a...)
 	}
 	return _ERX_SetVendor(p, 8, a)
 }
@@ -717,92 +749,124 @@ func ERXTunnelVirtualRouter_Del(p *radius.Packet) {
 	_ERX_DelVendor(p, 8)
 }
 
-func ERXTunnelPassword_Add(p *radius.Packet, value []byte) (err error) {
+func ERXTunnelPassword_Add(p *radius.Packet, tag byte, value []byte) (err error) {
 	var a radius.Attribute
 	a, err = radius.NewBytes(value)
 	if err != nil {
 		return
 	}
+	if tag <= 0x1F {
+		a = append(radius.Attribute{tag}, a...)
+	}
 	return _ERX_AddVendor(p, 9, a)
 }
 
-func ERXTunnelPassword_AddString(p *radius.Packet, value string) (err error) {
+func ERXTunnelPassword_AddString(p *radius.Packet, tag byte, value string) (err error) {
 	var a radius.Attribute
 	a, err = radius.NewString(value)
 	if err != nil {
 		return
 	}
+	if tag <= 0x1F {
+		a = append(radius.Attribute{tag}, a...)
+	}
 	return _ERX_AddVendor(p, 9, a)
 }
 
-func ERXTunnelPassword_Get(p *radius.Packet) (value []byte) {
-	value, _ = ERXTunnelPassword_Lookup(p)
+func ERXTunnelPassword_Get(p *radius.Packet) (tag byte, value []byte) {
+	tag, value, _ = ERXTunnelPassword_Lookup(p)
 	return
 }
 
-func ERXTunnelPassword_GetString(p *radius.Packet) (value string) {
-	value, _ = ERXTunnelPassword_LookupString(p)
+func ERXTunnelPassword_GetString(p *radius.Packet) (tag byte, value string) {
+	tag, value, _ = ERXTunnelPassword_LookupString(p)
 	return
 }
 
-func ERXTunnelPassword_Gets(p *radius.Packet) (values [][]byte, err error) {
+func ERXTunnelPassword_Gets(p *radius.Packet) (tags []byte, values [][]byte, err error) {
 	var i []byte
 	for _, attr := range _ERX_GetsVendor(p, 9) {
+		var tag byte
+		if len(attr) >= 1 && attr[0] <= 0x1F {
+			tag = attr[0]
+			attr = attr[1:]
+		}
 		i = radius.Bytes(attr)
 		if err != nil {
 			return
 		}
 		values = append(values, i)
+		tags = append(tags, tag)
 	}
 	return
 }
 
-func ERXTunnelPassword_GetStrings(p *radius.Packet) (values []string, err error) {
+func ERXTunnelPassword_GetStrings(p *radius.Packet) (tags []byte, values []string, err error) {
 	var i string
 	for _, attr := range _ERX_GetsVendor(p, 9) {
+		var tag byte
+		if len(attr) >= 1 && attr[0] <= 0x1F {
+			tag = attr[0]
+			attr = attr[1:]
+		}
 		i = radius.String(attr)
 		if err != nil {
 			return
 		}
 		values = append(values, i)
+		tags = append(tags, tag)
 	}
 	return
 }
 
-func ERXTunnelPassword_Lookup(p *radius.Packet) (value []byte, err error) {
+func ERXTunnelPassword_Lookup(p *radius.Packet) (tag byte, value []byte, err error) {
 	a, ok := _ERX_LookupVendor(p, 9)
 	if !ok {
 		err = radius.ErrNoAttribute
 		return
+	}
+	if len(a) >= 1 && a[0] <= 0x1F {
+		tag = a[0]
+		a = a[1:]
 	}
 	value = radius.Bytes(a)
 	return
 }
 
-func ERXTunnelPassword_LookupString(p *radius.Packet) (value string, err error) {
+func ERXTunnelPassword_LookupString(p *radius.Packet) (tag byte, value string, err error) {
 	a, ok := _ERX_LookupVendor(p, 9)
 	if !ok {
 		err = radius.ErrNoAttribute
 		return
 	}
+	if len(a) >= 1 && a[0] <= 0x1F {
+		tag = a[0]
+		a = a[1:]
+	}
 	value = radius.String(a)
 	return
 }
 
-func ERXTunnelPassword_Set(p *radius.Packet, value []byte) (err error) {
+func ERXTunnelPassword_Set(p *radius.Packet, tag byte, value []byte) (err error) {
 	var a radius.Attribute
 	a, err = radius.NewBytes(value)
 	if err != nil {
 		return
 	}
+	if tag <= 0x1F {
+		a = append(radius.Attribute{tag}, a...)
+	}
 	return _ERX_SetVendor(p, 9, a)
 }
 
-func ERXTunnelPassword_SetString(p *radius.Packet, value string) (err error) {
+func ERXTunnelPassword_SetString(p *radius.Packet, tag byte, value string) (err error) {
 	var a radius.Attribute
 	a, err = radius.NewString(value)
 	if err != nil {
 		return
+	}
+	if tag <= 0x1F {
+		a = append(radius.Attribute{tag}, a...)
 	}
 	return _ERX_SetVendor(p, 9, a)
 }
@@ -3661,38 +3725,24 @@ func ERXIpV6LocalInterface_Del(p *radius.Packet) {
 	_ERX_DelVendor(p, 46)
 }
 
-func ERXIpv6PrimaryDNS_Add(p *radius.Packet, value []byte) (err error) {
+func ERXIpv6PrimaryDNS_Add(p *radius.Packet, value net.IP) (err error) {
 	var a radius.Attribute
-	a, err = radius.NewBytes(value)
+	a, err = radius.NewIPv6Addr(value)
 	if err != nil {
 		return
 	}
 	return _ERX_AddVendor(p, 47, a)
 }
 
-func ERXIpv6PrimaryDNS_AddString(p *radius.Packet, value string) (err error) {
-	var a radius.Attribute
-	a, err = radius.NewString(value)
-	if err != nil {
-		return
-	}
-	return _ERX_AddVendor(p, 47, a)
-}
-
-func ERXIpv6PrimaryDNS_Get(p *radius.Packet) (value []byte) {
+func ERXIpv6PrimaryDNS_Get(p *radius.Packet) (value net.IP) {
 	value, _ = ERXIpv6PrimaryDNS_Lookup(p)
 	return
 }
 
-func ERXIpv6PrimaryDNS_GetString(p *radius.Packet) (value string) {
-	value, _ = ERXIpv6PrimaryDNS_LookupString(p)
-	return
-}
-
-func ERXIpv6PrimaryDNS_Gets(p *radius.Packet) (values [][]byte, err error) {
-	var i []byte
+func ERXIpv6PrimaryDNS_Gets(p *radius.Packet) (values []net.IP, err error) {
+	var i net.IP
 	for _, attr := range _ERX_GetsVendor(p, 47) {
-		i = radius.Bytes(attr)
+		i, err = radius.IPv6Addr(attr)
 		if err != nil {
 			return
 		}
@@ -3701,50 +3751,19 @@ func ERXIpv6PrimaryDNS_Gets(p *radius.Packet) (values [][]byte, err error) {
 	return
 }
 
-func ERXIpv6PrimaryDNS_GetStrings(p *radius.Packet) (values []string, err error) {
-	var i string
-	for _, attr := range _ERX_GetsVendor(p, 47) {
-		i = radius.String(attr)
-		if err != nil {
-			return
-		}
-		values = append(values, i)
-	}
-	return
-}
-
-func ERXIpv6PrimaryDNS_Lookup(p *radius.Packet) (value []byte, err error) {
+func ERXIpv6PrimaryDNS_Lookup(p *radius.Packet) (value net.IP, err error) {
 	a, ok := _ERX_LookupVendor(p, 47)
 	if !ok {
 		err = radius.ErrNoAttribute
 		return
 	}
-	value = radius.Bytes(a)
+	value, err = radius.IPv6Addr(a)
 	return
 }
 
-func ERXIpv6PrimaryDNS_LookupString(p *radius.Packet) (value string, err error) {
-	a, ok := _ERX_LookupVendor(p, 47)
-	if !ok {
-		err = radius.ErrNoAttribute
-		return
-	}
-	value = radius.String(a)
-	return
-}
-
-func ERXIpv6PrimaryDNS_Set(p *radius.Packet, value []byte) (err error) {
+func ERXIpv6PrimaryDNS_Set(p *radius.Packet, value net.IP) (err error) {
 	var a radius.Attribute
-	a, err = radius.NewBytes(value)
-	if err != nil {
-		return
-	}
-	return _ERX_SetVendor(p, 47, a)
-}
-
-func ERXIpv6PrimaryDNS_SetString(p *radius.Packet, value string) (err error) {
-	var a radius.Attribute
-	a, err = radius.NewString(value)
+	a, err = radius.NewIPv6Addr(value)
 	if err != nil {
 		return
 	}
@@ -3755,38 +3774,24 @@ func ERXIpv6PrimaryDNS_Del(p *radius.Packet) {
 	_ERX_DelVendor(p, 47)
 }
 
-func ERXIpv6SecondaryDNS_Add(p *radius.Packet, value []byte) (err error) {
+func ERXIpv6SecondaryDNS_Add(p *radius.Packet, value net.IP) (err error) {
 	var a radius.Attribute
-	a, err = radius.NewBytes(value)
+	a, err = radius.NewIPv6Addr(value)
 	if err != nil {
 		return
 	}
 	return _ERX_AddVendor(p, 48, a)
 }
 
-func ERXIpv6SecondaryDNS_AddString(p *radius.Packet, value string) (err error) {
-	var a radius.Attribute
-	a, err = radius.NewString(value)
-	if err != nil {
-		return
-	}
-	return _ERX_AddVendor(p, 48, a)
-}
-
-func ERXIpv6SecondaryDNS_Get(p *radius.Packet) (value []byte) {
+func ERXIpv6SecondaryDNS_Get(p *radius.Packet) (value net.IP) {
 	value, _ = ERXIpv6SecondaryDNS_Lookup(p)
 	return
 }
 
-func ERXIpv6SecondaryDNS_GetString(p *radius.Packet) (value string) {
-	value, _ = ERXIpv6SecondaryDNS_LookupString(p)
-	return
-}
-
-func ERXIpv6SecondaryDNS_Gets(p *radius.Packet) (values [][]byte, err error) {
-	var i []byte
+func ERXIpv6SecondaryDNS_Gets(p *radius.Packet) (values []net.IP, err error) {
+	var i net.IP
 	for _, attr := range _ERX_GetsVendor(p, 48) {
-		i = radius.Bytes(attr)
+		i, err = radius.IPv6Addr(attr)
 		if err != nil {
 			return
 		}
@@ -3795,50 +3800,19 @@ func ERXIpv6SecondaryDNS_Gets(p *radius.Packet) (values [][]byte, err error) {
 	return
 }
 
-func ERXIpv6SecondaryDNS_GetStrings(p *radius.Packet) (values []string, err error) {
-	var i string
-	for _, attr := range _ERX_GetsVendor(p, 48) {
-		i = radius.String(attr)
-		if err != nil {
-			return
-		}
-		values = append(values, i)
-	}
-	return
-}
-
-func ERXIpv6SecondaryDNS_Lookup(p *radius.Packet) (value []byte, err error) {
+func ERXIpv6SecondaryDNS_Lookup(p *radius.Packet) (value net.IP, err error) {
 	a, ok := _ERX_LookupVendor(p, 48)
 	if !ok {
 		err = radius.ErrNoAttribute
 		return
 	}
-	value = radius.Bytes(a)
+	value, err = radius.IPv6Addr(a)
 	return
 }
 
-func ERXIpv6SecondaryDNS_LookupString(p *radius.Packet) (value string, err error) {
-	a, ok := _ERX_LookupVendor(p, 48)
-	if !ok {
-		err = radius.ErrNoAttribute
-		return
-	}
-	value = radius.String(a)
-	return
-}
-
-func ERXIpv6SecondaryDNS_Set(p *radius.Packet, value []byte) (err error) {
+func ERXIpv6SecondaryDNS_Set(p *radius.Packet, value net.IP) (err error) {
 	var a radius.Attribute
-	a, err = radius.NewBytes(value)
-	if err != nil {
-		return
-	}
-	return _ERX_SetVendor(p, 48, a)
-}
-
-func ERXIpv6SecondaryDNS_SetString(p *radius.Packet, value string) (err error) {
-	var a radius.Attribute
-	a, err = radius.NewString(value)
+	a, err = radius.NewIPv6Addr(value)
 	if err != nil {
 		return
 	}
@@ -6723,4 +6697,8731 @@ func ERXServiceSession_SetString(p *radius.Packet, value string) (err error) {
 
 func ERXServiceSession_Del(p *radius.Packet) {
 	_ERX_DelVendor(p, 83)
+}
+
+type ERXMobileIPAlgorithm uint32
+
+var ERXMobileIPAlgorithm_Strings = map[ERXMobileIPAlgorithm]string{}
+
+func (a ERXMobileIPAlgorithm) String() string {
+	if str, ok := ERXMobileIPAlgorithm_Strings[a]; ok {
+		return str
+	}
+	return "ERXMobileIPAlgorithm(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMobileIPAlgorithm_Add(p *radius.Packet, value ERXMobileIPAlgorithm) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 84, a)
+}
+
+func ERXMobileIPAlgorithm_Get(p *radius.Packet) (value ERXMobileIPAlgorithm) {
+	value, _ = ERXMobileIPAlgorithm_Lookup(p)
+	return
+}
+
+func ERXMobileIPAlgorithm_Gets(p *radius.Packet) (values []ERXMobileIPAlgorithm, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 84) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMobileIPAlgorithm(i))
+	}
+	return
+}
+
+func ERXMobileIPAlgorithm_Lookup(p *radius.Packet) (value ERXMobileIPAlgorithm, err error) {
+	a, ok := _ERX_LookupVendor(p, 84)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMobileIPAlgorithm(i)
+	return
+}
+
+func ERXMobileIPAlgorithm_Set(p *radius.Packet, value ERXMobileIPAlgorithm) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 84, a)
+}
+
+func ERXMobileIPAlgorithm_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 84)
+}
+
+type ERXMobileIPSPI uint32
+
+var ERXMobileIPSPI_Strings = map[ERXMobileIPSPI]string{}
+
+func (a ERXMobileIPSPI) String() string {
+	if str, ok := ERXMobileIPSPI_Strings[a]; ok {
+		return str
+	}
+	return "ERXMobileIPSPI(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMobileIPSPI_Add(p *radius.Packet, value ERXMobileIPSPI) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 85, a)
+}
+
+func ERXMobileIPSPI_Get(p *radius.Packet) (value ERXMobileIPSPI) {
+	value, _ = ERXMobileIPSPI_Lookup(p)
+	return
+}
+
+func ERXMobileIPSPI_Gets(p *radius.Packet) (values []ERXMobileIPSPI, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 85) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMobileIPSPI(i))
+	}
+	return
+}
+
+func ERXMobileIPSPI_Lookup(p *radius.Packet) (value ERXMobileIPSPI, err error) {
+	a, ok := _ERX_LookupVendor(p, 85)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMobileIPSPI(i)
+	return
+}
+
+func ERXMobileIPSPI_Set(p *radius.Packet, value ERXMobileIPSPI) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 85, a)
+}
+
+func ERXMobileIPSPI_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 85)
+}
+
+func ERXMobileIPKey_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 86, a)
+}
+
+func ERXMobileIPKey_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 86, a)
+}
+
+func ERXMobileIPKey_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXMobileIPKey_Lookup(p)
+	return
+}
+
+func ERXMobileIPKey_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXMobileIPKey_LookupString(p)
+	return
+}
+
+func ERXMobileIPKey_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 86) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXMobileIPKey_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 86) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXMobileIPKey_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 86)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXMobileIPKey_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 86)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXMobileIPKey_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 86, a)
+}
+
+func ERXMobileIPKey_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 86, a)
+}
+
+func ERXMobileIPKey_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 86)
+}
+
+type ERXMobileIPReplay uint32
+
+var ERXMobileIPReplay_Strings = map[ERXMobileIPReplay]string{}
+
+func (a ERXMobileIPReplay) String() string {
+	if str, ok := ERXMobileIPReplay_Strings[a]; ok {
+		return str
+	}
+	return "ERXMobileIPReplay(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMobileIPReplay_Add(p *radius.Packet, value ERXMobileIPReplay) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 87, a)
+}
+
+func ERXMobileIPReplay_Get(p *radius.Packet) (value ERXMobileIPReplay) {
+	value, _ = ERXMobileIPReplay_Lookup(p)
+	return
+}
+
+func ERXMobileIPReplay_Gets(p *radius.Packet) (values []ERXMobileIPReplay, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 87) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMobileIPReplay(i))
+	}
+	return
+}
+
+func ERXMobileIPReplay_Lookup(p *radius.Packet) (value ERXMobileIPReplay, err error) {
+	a, ok := _ERX_LookupVendor(p, 87)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMobileIPReplay(i)
+	return
+}
+
+func ERXMobileIPReplay_Set(p *radius.Packet, value ERXMobileIPReplay) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 87, a)
+}
+
+func ERXMobileIPReplay_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 87)
+}
+
+func ERXMobileIPAccessControl_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 88, a)
+}
+
+func ERXMobileIPAccessControl_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 88, a)
+}
+
+func ERXMobileIPAccessControl_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXMobileIPAccessControl_Lookup(p)
+	return
+}
+
+func ERXMobileIPAccessControl_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXMobileIPAccessControl_LookupString(p)
+	return
+}
+
+func ERXMobileIPAccessControl_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 88) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXMobileIPAccessControl_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 88) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXMobileIPAccessControl_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 88)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXMobileIPAccessControl_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 88)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXMobileIPAccessControl_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 88, a)
+}
+
+func ERXMobileIPAccessControl_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 88, a)
+}
+
+func ERXMobileIPAccessControl_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 88)
+}
+
+type ERXMobileIPLifetime uint32
+
+var ERXMobileIPLifetime_Strings = map[ERXMobileIPLifetime]string{}
+
+func (a ERXMobileIPLifetime) String() string {
+	if str, ok := ERXMobileIPLifetime_Strings[a]; ok {
+		return str
+	}
+	return "ERXMobileIPLifetime(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMobileIPLifetime_Add(p *radius.Packet, value ERXMobileIPLifetime) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 89, a)
+}
+
+func ERXMobileIPLifetime_Get(p *radius.Packet) (value ERXMobileIPLifetime) {
+	value, _ = ERXMobileIPLifetime_Lookup(p)
+	return
+}
+
+func ERXMobileIPLifetime_Gets(p *radius.Packet) (values []ERXMobileIPLifetime, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 89) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMobileIPLifetime(i))
+	}
+	return
+}
+
+func ERXMobileIPLifetime_Lookup(p *radius.Packet) (value ERXMobileIPLifetime, err error) {
+	a, ok := _ERX_LookupVendor(p, 89)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMobileIPLifetime(i)
+	return
+}
+
+func ERXMobileIPLifetime_Set(p *radius.Packet, value ERXMobileIPLifetime) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 89, a)
+}
+
+func ERXMobileIPLifetime_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 89)
+}
+
+type ERXL2TPResynchMethod uint32
+
+const (
+	ERXL2TPResynchMethod_Value_Disable                  ERXL2TPResynchMethod = 0
+	ERXL2TPResynchMethod_Value_Failover                 ERXL2TPResynchMethod = 1
+	ERXL2TPResynchMethod_Value_SilentFailover           ERXL2TPResynchMethod = 2
+	ERXL2TPResynchMethod_Value_FailoverWithSilentBackup ERXL2TPResynchMethod = 3
+)
+
+var ERXL2TPResynchMethod_Strings = map[ERXL2TPResynchMethod]string{
+	ERXL2TPResynchMethod_Value_Disable:                  "disable",
+	ERXL2TPResynchMethod_Value_Failover:                 "failover",
+	ERXL2TPResynchMethod_Value_SilentFailover:           "silent-failover",
+	ERXL2TPResynchMethod_Value_FailoverWithSilentBackup: "failover-with-silent-backup",
+}
+
+func (a ERXL2TPResynchMethod) String() string {
+	if str, ok := ERXL2TPResynchMethod_Strings[a]; ok {
+		return str
+	}
+	return "ERXL2TPResynchMethod(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXL2TPResynchMethod_Add(p *radius.Packet, value ERXL2TPResynchMethod) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 90, a)
+}
+
+func ERXL2TPResynchMethod_Get(p *radius.Packet) (value ERXL2TPResynchMethod) {
+	value, _ = ERXL2TPResynchMethod_Lookup(p)
+	return
+}
+
+func ERXL2TPResynchMethod_Gets(p *radius.Packet) (values []ERXL2TPResynchMethod, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 90) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXL2TPResynchMethod(i))
+	}
+	return
+}
+
+func ERXL2TPResynchMethod_Lookup(p *radius.Packet) (value ERXL2TPResynchMethod, err error) {
+	a, ok := _ERX_LookupVendor(p, 90)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXL2TPResynchMethod(i)
+	return
+}
+
+func ERXL2TPResynchMethod_Set(p *radius.Packet, value ERXL2TPResynchMethod) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 90, a)
+}
+
+func ERXL2TPResynchMethod_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 90)
+}
+
+func ERXTunnelSwitchProfile_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 91, a)
+}
+
+func ERXTunnelSwitchProfile_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 91, a)
+}
+
+func ERXTunnelSwitchProfile_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXTunnelSwitchProfile_Lookup(p)
+	return
+}
+
+func ERXTunnelSwitchProfile_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXTunnelSwitchProfile_LookupString(p)
+	return
+}
+
+func ERXTunnelSwitchProfile_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 91) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXTunnelSwitchProfile_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 91) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXTunnelSwitchProfile_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 91)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXTunnelSwitchProfile_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 91)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXTunnelSwitchProfile_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 91, a)
+}
+
+func ERXTunnelSwitchProfile_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 91, a)
+}
+
+func ERXTunnelSwitchProfile_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 91)
+}
+
+func ERXL2cUpStreamData_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 92, a)
+}
+
+func ERXL2cUpStreamData_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 92, a)
+}
+
+func ERXL2cUpStreamData_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXL2cUpStreamData_Lookup(p)
+	return
+}
+
+func ERXL2cUpStreamData_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXL2cUpStreamData_LookupString(p)
+	return
+}
+
+func ERXL2cUpStreamData_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 92) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXL2cUpStreamData_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 92) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXL2cUpStreamData_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 92)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXL2cUpStreamData_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 92)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXL2cUpStreamData_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 92, a)
+}
+
+func ERXL2cUpStreamData_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 92, a)
+}
+
+func ERXL2cUpStreamData_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 92)
+}
+
+func ERXL2cDownStreamData_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 93, a)
+}
+
+func ERXL2cDownStreamData_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 93, a)
+}
+
+func ERXL2cDownStreamData_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXL2cDownStreamData_Lookup(p)
+	return
+}
+
+func ERXL2cDownStreamData_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXL2cDownStreamData_LookupString(p)
+	return
+}
+
+func ERXL2cDownStreamData_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 93) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXL2cDownStreamData_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 93) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXL2cDownStreamData_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 93)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXL2cDownStreamData_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 93)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXL2cDownStreamData_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 93, a)
+}
+
+func ERXL2cDownStreamData_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 93, a)
+}
+
+func ERXL2cDownStreamData_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 93)
+}
+
+type ERXTunnelTxSpeedMethod uint32
+
+const (
+	ERXTunnelTxSpeedMethod_Value_StaticLayer2  ERXTunnelTxSpeedMethod = 1
+	ERXTunnelTxSpeedMethod_Value_DynamicLayer2 ERXTunnelTxSpeedMethod = 2
+	ERXTunnelTxSpeedMethod_Value_Qos           ERXTunnelTxSpeedMethod = 3
+	ERXTunnelTxSpeedMethod_Value_Actual        ERXTunnelTxSpeedMethod = 4
+)
+
+var ERXTunnelTxSpeedMethod_Strings = map[ERXTunnelTxSpeedMethod]string{
+	ERXTunnelTxSpeedMethod_Value_StaticLayer2:  "static-layer2",
+	ERXTunnelTxSpeedMethod_Value_DynamicLayer2: "dynamic-layer2",
+	ERXTunnelTxSpeedMethod_Value_Qos:           "qos",
+	ERXTunnelTxSpeedMethod_Value_Actual:        "actual",
+}
+
+func (a ERXTunnelTxSpeedMethod) String() string {
+	if str, ok := ERXTunnelTxSpeedMethod_Strings[a]; ok {
+		return str
+	}
+	return "ERXTunnelTxSpeedMethod(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXTunnelTxSpeedMethod_Add(p *radius.Packet, value ERXTunnelTxSpeedMethod) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 94, a)
+}
+
+func ERXTunnelTxSpeedMethod_Get(p *radius.Packet) (value ERXTunnelTxSpeedMethod) {
+	value, _ = ERXTunnelTxSpeedMethod_Lookup(p)
+	return
+}
+
+func ERXTunnelTxSpeedMethod_Gets(p *radius.Packet) (values []ERXTunnelTxSpeedMethod, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 94) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXTunnelTxSpeedMethod(i))
+	}
+	return
+}
+
+func ERXTunnelTxSpeedMethod_Lookup(p *radius.Packet) (value ERXTunnelTxSpeedMethod, err error) {
+	a, ok := _ERX_LookupVendor(p, 94)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXTunnelTxSpeedMethod(i)
+	return
+}
+
+func ERXTunnelTxSpeedMethod_Set(p *radius.Packet, value ERXTunnelTxSpeedMethod) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 94, a)
+}
+
+func ERXTunnelTxSpeedMethod_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 94)
+}
+
+type ERXIGMPQueryInterval uint32
+
+var ERXIGMPQueryInterval_Strings = map[ERXIGMPQueryInterval]string{}
+
+func (a ERXIGMPQueryInterval) String() string {
+	if str, ok := ERXIGMPQueryInterval_Strings[a]; ok {
+		return str
+	}
+	return "ERXIGMPQueryInterval(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIGMPQueryInterval_Add(p *radius.Packet, value ERXIGMPQueryInterval) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 95, a)
+}
+
+func ERXIGMPQueryInterval_Get(p *radius.Packet) (value ERXIGMPQueryInterval) {
+	value, _ = ERXIGMPQueryInterval_Lookup(p)
+	return
+}
+
+func ERXIGMPQueryInterval_Gets(p *radius.Packet) (values []ERXIGMPQueryInterval, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 95) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIGMPQueryInterval(i))
+	}
+	return
+}
+
+func ERXIGMPQueryInterval_Lookup(p *radius.Packet) (value ERXIGMPQueryInterval, err error) {
+	a, ok := _ERX_LookupVendor(p, 95)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIGMPQueryInterval(i)
+	return
+}
+
+func ERXIGMPQueryInterval_Set(p *radius.Packet, value ERXIGMPQueryInterval) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 95, a)
+}
+
+func ERXIGMPQueryInterval_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 95)
+}
+
+type ERXIGMPMaxRespTime uint32
+
+var ERXIGMPMaxRespTime_Strings = map[ERXIGMPMaxRespTime]string{}
+
+func (a ERXIGMPMaxRespTime) String() string {
+	if str, ok := ERXIGMPMaxRespTime_Strings[a]; ok {
+		return str
+	}
+	return "ERXIGMPMaxRespTime(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIGMPMaxRespTime_Add(p *radius.Packet, value ERXIGMPMaxRespTime) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 96, a)
+}
+
+func ERXIGMPMaxRespTime_Get(p *radius.Packet) (value ERXIGMPMaxRespTime) {
+	value, _ = ERXIGMPMaxRespTime_Lookup(p)
+	return
+}
+
+func ERXIGMPMaxRespTime_Gets(p *radius.Packet) (values []ERXIGMPMaxRespTime, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 96) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIGMPMaxRespTime(i))
+	}
+	return
+}
+
+func ERXIGMPMaxRespTime_Lookup(p *radius.Packet) (value ERXIGMPMaxRespTime, err error) {
+	a, ok := _ERX_LookupVendor(p, 96)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIGMPMaxRespTime(i)
+	return
+}
+
+func ERXIGMPMaxRespTime_Set(p *radius.Packet, value ERXIGMPMaxRespTime) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 96, a)
+}
+
+func ERXIGMPMaxRespTime_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 96)
+}
+
+type ERXIGMPImmediateLeave uint32
+
+const (
+	ERXIGMPImmediateLeave_Value_Disabled ERXIGMPImmediateLeave = 0
+	ERXIGMPImmediateLeave_Value_Enabled  ERXIGMPImmediateLeave = 1
+)
+
+var ERXIGMPImmediateLeave_Strings = map[ERXIGMPImmediateLeave]string{
+	ERXIGMPImmediateLeave_Value_Disabled: "disabled",
+	ERXIGMPImmediateLeave_Value_Enabled:  "enabled",
+}
+
+func (a ERXIGMPImmediateLeave) String() string {
+	if str, ok := ERXIGMPImmediateLeave_Strings[a]; ok {
+		return str
+	}
+	return "ERXIGMPImmediateLeave(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIGMPImmediateLeave_Add(p *radius.Packet, value ERXIGMPImmediateLeave) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 97, a)
+}
+
+func ERXIGMPImmediateLeave_Get(p *radius.Packet) (value ERXIGMPImmediateLeave) {
+	value, _ = ERXIGMPImmediateLeave_Lookup(p)
+	return
+}
+
+func ERXIGMPImmediateLeave_Gets(p *radius.Packet) (values []ERXIGMPImmediateLeave, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 97) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIGMPImmediateLeave(i))
+	}
+	return
+}
+
+func ERXIGMPImmediateLeave_Lookup(p *radius.Packet) (value ERXIGMPImmediateLeave, err error) {
+	a, ok := _ERX_LookupVendor(p, 97)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIGMPImmediateLeave(i)
+	return
+}
+
+func ERXIGMPImmediateLeave_Set(p *radius.Packet, value ERXIGMPImmediateLeave) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 97, a)
+}
+
+func ERXIGMPImmediateLeave_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 97)
+}
+
+type ERXMLDQueryInterval uint32
+
+var ERXMLDQueryInterval_Strings = map[ERXMLDQueryInterval]string{}
+
+func (a ERXMLDQueryInterval) String() string {
+	if str, ok := ERXMLDQueryInterval_Strings[a]; ok {
+		return str
+	}
+	return "ERXMLDQueryInterval(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMLDQueryInterval_Add(p *radius.Packet, value ERXMLDQueryInterval) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 98, a)
+}
+
+func ERXMLDQueryInterval_Get(p *radius.Packet) (value ERXMLDQueryInterval) {
+	value, _ = ERXMLDQueryInterval_Lookup(p)
+	return
+}
+
+func ERXMLDQueryInterval_Gets(p *radius.Packet) (values []ERXMLDQueryInterval, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 98) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMLDQueryInterval(i))
+	}
+	return
+}
+
+func ERXMLDQueryInterval_Lookup(p *radius.Packet) (value ERXMLDQueryInterval, err error) {
+	a, ok := _ERX_LookupVendor(p, 98)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMLDQueryInterval(i)
+	return
+}
+
+func ERXMLDQueryInterval_Set(p *radius.Packet, value ERXMLDQueryInterval) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 98, a)
+}
+
+func ERXMLDQueryInterval_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 98)
+}
+
+type ERXMLDMaxRespTime uint32
+
+var ERXMLDMaxRespTime_Strings = map[ERXMLDMaxRespTime]string{}
+
+func (a ERXMLDMaxRespTime) String() string {
+	if str, ok := ERXMLDMaxRespTime_Strings[a]; ok {
+		return str
+	}
+	return "ERXMLDMaxRespTime(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMLDMaxRespTime_Add(p *radius.Packet, value ERXMLDMaxRespTime) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 99, a)
+}
+
+func ERXMLDMaxRespTime_Get(p *radius.Packet) (value ERXMLDMaxRespTime) {
+	value, _ = ERXMLDMaxRespTime_Lookup(p)
+	return
+}
+
+func ERXMLDMaxRespTime_Gets(p *radius.Packet) (values []ERXMLDMaxRespTime, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 99) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMLDMaxRespTime(i))
+	}
+	return
+}
+
+func ERXMLDMaxRespTime_Lookup(p *radius.Packet) (value ERXMLDMaxRespTime, err error) {
+	a, ok := _ERX_LookupVendor(p, 99)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMLDMaxRespTime(i)
+	return
+}
+
+func ERXMLDMaxRespTime_Set(p *radius.Packet, value ERXMLDMaxRespTime) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 99, a)
+}
+
+func ERXMLDMaxRespTime_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 99)
+}
+
+type ERXMLDImmediateLeave uint32
+
+const (
+	ERXMLDImmediateLeave_Value_Disabled ERXMLDImmediateLeave = 0
+	ERXMLDImmediateLeave_Value_Enabled  ERXMLDImmediateLeave = 1
+)
+
+var ERXMLDImmediateLeave_Strings = map[ERXMLDImmediateLeave]string{
+	ERXMLDImmediateLeave_Value_Disabled: "disabled",
+	ERXMLDImmediateLeave_Value_Enabled:  "enabled",
+}
+
+func (a ERXMLDImmediateLeave) String() string {
+	if str, ok := ERXMLDImmediateLeave_Strings[a]; ok {
+		return str
+	}
+	return "ERXMLDImmediateLeave(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMLDImmediateLeave_Add(p *radius.Packet, value ERXMLDImmediateLeave) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 100, a)
+}
+
+func ERXMLDImmediateLeave_Get(p *radius.Packet) (value ERXMLDImmediateLeave) {
+	value, _ = ERXMLDImmediateLeave_Lookup(p)
+	return
+}
+
+func ERXMLDImmediateLeave_Gets(p *radius.Packet) (values []ERXMLDImmediateLeave, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 100) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMLDImmediateLeave(i))
+	}
+	return
+}
+
+func ERXMLDImmediateLeave_Lookup(p *radius.Packet) (value ERXMLDImmediateLeave, err error) {
+	a, ok := _ERX_LookupVendor(p, 100)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMLDImmediateLeave(i)
+	return
+}
+
+func ERXMLDImmediateLeave_Set(p *radius.Packet, value ERXMLDImmediateLeave) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 100, a)
+}
+
+func ERXMLDImmediateLeave_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 100)
+}
+
+type ERXIPBlockMulticast uint32
+
+const (
+	ERXIPBlockMulticast_Value_Disabled ERXIPBlockMulticast = 0
+	ERXIPBlockMulticast_Value_Enabled  ERXIPBlockMulticast = 1
+)
+
+var ERXIPBlockMulticast_Strings = map[ERXIPBlockMulticast]string{
+	ERXIPBlockMulticast_Value_Disabled: "disabled",
+	ERXIPBlockMulticast_Value_Enabled:  "enabled",
+}
+
+func (a ERXIPBlockMulticast) String() string {
+	if str, ok := ERXIPBlockMulticast_Strings[a]; ok {
+		return str
+	}
+	return "ERXIPBlockMulticast(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIPBlockMulticast_Add(p *radius.Packet, value ERXIPBlockMulticast) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 101, a)
+}
+
+func ERXIPBlockMulticast_Get(p *radius.Packet) (value ERXIPBlockMulticast) {
+	value, _ = ERXIPBlockMulticast_Lookup(p)
+	return
+}
+
+func ERXIPBlockMulticast_Gets(p *radius.Packet) (values []ERXIPBlockMulticast, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 101) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIPBlockMulticast(i))
+	}
+	return
+}
+
+func ERXIPBlockMulticast_Lookup(p *radius.Packet) (value ERXIPBlockMulticast, err error) {
+	a, ok := _ERX_LookupVendor(p, 101)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIPBlockMulticast(i)
+	return
+}
+
+func ERXIPBlockMulticast_Set(p *radius.Packet, value ERXIPBlockMulticast) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 101, a)
+}
+
+func ERXIPBlockMulticast_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 101)
+}
+
+type ERXIGMPExplicitTracking uint32
+
+const (
+	ERXIGMPExplicitTracking_Value_Disabled ERXIGMPExplicitTracking = 0
+	ERXIGMPExplicitTracking_Value_Enabled  ERXIGMPExplicitTracking = 1
+)
+
+var ERXIGMPExplicitTracking_Strings = map[ERXIGMPExplicitTracking]string{
+	ERXIGMPExplicitTracking_Value_Disabled: "disabled",
+	ERXIGMPExplicitTracking_Value_Enabled:  "enabled",
+}
+
+func (a ERXIGMPExplicitTracking) String() string {
+	if str, ok := ERXIGMPExplicitTracking_Strings[a]; ok {
+		return str
+	}
+	return "ERXIGMPExplicitTracking(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIGMPExplicitTracking_Add(p *radius.Packet, value ERXIGMPExplicitTracking) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 102, a)
+}
+
+func ERXIGMPExplicitTracking_Get(p *radius.Packet) (value ERXIGMPExplicitTracking) {
+	value, _ = ERXIGMPExplicitTracking_Lookup(p)
+	return
+}
+
+func ERXIGMPExplicitTracking_Gets(p *radius.Packet) (values []ERXIGMPExplicitTracking, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 102) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIGMPExplicitTracking(i))
+	}
+	return
+}
+
+func ERXIGMPExplicitTracking_Lookup(p *radius.Packet) (value ERXIGMPExplicitTracking, err error) {
+	a, ok := _ERX_LookupVendor(p, 102)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIGMPExplicitTracking(i)
+	return
+}
+
+func ERXIGMPExplicitTracking_Set(p *radius.Packet, value ERXIGMPExplicitTracking) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 102, a)
+}
+
+func ERXIGMPExplicitTracking_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 102)
+}
+
+type ERXIGMPNoTrackingV2Grps uint32
+
+const (
+	ERXIGMPNoTrackingV2Grps_Value_Disabled ERXIGMPNoTrackingV2Grps = 0
+	ERXIGMPNoTrackingV2Grps_Value_Enabled  ERXIGMPNoTrackingV2Grps = 1
+)
+
+var ERXIGMPNoTrackingV2Grps_Strings = map[ERXIGMPNoTrackingV2Grps]string{
+	ERXIGMPNoTrackingV2Grps_Value_Disabled: "disabled",
+	ERXIGMPNoTrackingV2Grps_Value_Enabled:  "enabled",
+}
+
+func (a ERXIGMPNoTrackingV2Grps) String() string {
+	if str, ok := ERXIGMPNoTrackingV2Grps_Strings[a]; ok {
+		return str
+	}
+	return "ERXIGMPNoTrackingV2Grps(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIGMPNoTrackingV2Grps_Add(p *radius.Packet, value ERXIGMPNoTrackingV2Grps) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 103, a)
+}
+
+func ERXIGMPNoTrackingV2Grps_Get(p *radius.Packet) (value ERXIGMPNoTrackingV2Grps) {
+	value, _ = ERXIGMPNoTrackingV2Grps_Lookup(p)
+	return
+}
+
+func ERXIGMPNoTrackingV2Grps_Gets(p *radius.Packet) (values []ERXIGMPNoTrackingV2Grps, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 103) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIGMPNoTrackingV2Grps(i))
+	}
+	return
+}
+
+func ERXIGMPNoTrackingV2Grps_Lookup(p *radius.Packet) (value ERXIGMPNoTrackingV2Grps, err error) {
+	a, ok := _ERX_LookupVendor(p, 103)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIGMPNoTrackingV2Grps(i)
+	return
+}
+
+func ERXIGMPNoTrackingV2Grps_Set(p *radius.Packet, value ERXIGMPNoTrackingV2Grps) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 103, a)
+}
+
+func ERXIGMPNoTrackingV2Grps_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 103)
+}
+
+type ERXMLDExplicitTracking uint32
+
+const (
+	ERXMLDExplicitTracking_Value_Disabled ERXMLDExplicitTracking = 0
+	ERXMLDExplicitTracking_Value_Enabled  ERXMLDExplicitTracking = 1
+)
+
+var ERXMLDExplicitTracking_Strings = map[ERXMLDExplicitTracking]string{
+	ERXMLDExplicitTracking_Value_Disabled: "disabled",
+	ERXMLDExplicitTracking_Value_Enabled:  "enabled",
+}
+
+func (a ERXMLDExplicitTracking) String() string {
+	if str, ok := ERXMLDExplicitTracking_Strings[a]; ok {
+		return str
+	}
+	return "ERXMLDExplicitTracking(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMLDExplicitTracking_Add(p *radius.Packet, value ERXMLDExplicitTracking) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 104, a)
+}
+
+func ERXMLDExplicitTracking_Get(p *radius.Packet) (value ERXMLDExplicitTracking) {
+	value, _ = ERXMLDExplicitTracking_Lookup(p)
+	return
+}
+
+func ERXMLDExplicitTracking_Gets(p *radius.Packet) (values []ERXMLDExplicitTracking, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 104) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMLDExplicitTracking(i))
+	}
+	return
+}
+
+func ERXMLDExplicitTracking_Lookup(p *radius.Packet) (value ERXMLDExplicitTracking, err error) {
+	a, ok := _ERX_LookupVendor(p, 104)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMLDExplicitTracking(i)
+	return
+}
+
+func ERXMLDExplicitTracking_Set(p *radius.Packet, value ERXMLDExplicitTracking) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 104, a)
+}
+
+func ERXMLDExplicitTracking_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 104)
+}
+
+type ERXMLDNoTrackingV1Grps uint32
+
+const (
+	ERXMLDNoTrackingV1Grps_Value_Disabled ERXMLDNoTrackingV1Grps = 0
+	ERXMLDNoTrackingV1Grps_Value_Enabled  ERXMLDNoTrackingV1Grps = 1
+)
+
+var ERXMLDNoTrackingV1Grps_Strings = map[ERXMLDNoTrackingV1Grps]string{
+	ERXMLDNoTrackingV1Grps_Value_Disabled: "disabled",
+	ERXMLDNoTrackingV1Grps_Value_Enabled:  "enabled",
+}
+
+func (a ERXMLDNoTrackingV1Grps) String() string {
+	if str, ok := ERXMLDNoTrackingV1Grps_Strings[a]; ok {
+		return str
+	}
+	return "ERXMLDNoTrackingV1Grps(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMLDNoTrackingV1Grps_Add(p *radius.Packet, value ERXMLDNoTrackingV1Grps) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 105, a)
+}
+
+func ERXMLDNoTrackingV1Grps_Get(p *radius.Packet) (value ERXMLDNoTrackingV1Grps) {
+	value, _ = ERXMLDNoTrackingV1Grps_Lookup(p)
+	return
+}
+
+func ERXMLDNoTrackingV1Grps_Gets(p *radius.Packet) (values []ERXMLDNoTrackingV1Grps, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 105) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMLDNoTrackingV1Grps(i))
+	}
+	return
+}
+
+func ERXMLDNoTrackingV1Grps_Lookup(p *radius.Packet) (value ERXMLDNoTrackingV1Grps, err error) {
+	a, ok := _ERX_LookupVendor(p, 105)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMLDNoTrackingV1Grps(i)
+	return
+}
+
+func ERXMLDNoTrackingV1Grps_Set(p *radius.Packet, value ERXMLDNoTrackingV1Grps) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 105, a)
+}
+
+func ERXMLDNoTrackingV1Grps_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 105)
+}
+
+func ERXIPv6IngressPolicyName_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 106, a)
+}
+
+func ERXIPv6IngressPolicyName_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 106, a)
+}
+
+func ERXIPv6IngressPolicyName_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv6IngressPolicyName_Lookup(p)
+	return
+}
+
+func ERXIPv6IngressPolicyName_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv6IngressPolicyName_LookupString(p)
+	return
+}
+
+func ERXIPv6IngressPolicyName_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 106) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6IngressPolicyName_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 106) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6IngressPolicyName_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 106)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv6IngressPolicyName_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 106)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv6IngressPolicyName_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 106, a)
+}
+
+func ERXIPv6IngressPolicyName_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 106, a)
+}
+
+func ERXIPv6IngressPolicyName_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 106)
+}
+
+func ERXIPv6EgressPolicyName_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 107, a)
+}
+
+func ERXIPv6EgressPolicyName_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 107, a)
+}
+
+func ERXIPv6EgressPolicyName_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv6EgressPolicyName_Lookup(p)
+	return
+}
+
+func ERXIPv6EgressPolicyName_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv6EgressPolicyName_LookupString(p)
+	return
+}
+
+func ERXIPv6EgressPolicyName_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 107) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6EgressPolicyName_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 107) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6EgressPolicyName_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 107)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv6EgressPolicyName_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 107)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv6EgressPolicyName_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 107, a)
+}
+
+func ERXIPv6EgressPolicyName_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 107, a)
+}
+
+func ERXIPv6EgressPolicyName_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 107)
+}
+
+func ERXCoSShapingPmtType_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 108, a)
+}
+
+func ERXCoSShapingPmtType_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 108, a)
+}
+
+func ERXCoSShapingPmtType_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXCoSShapingPmtType_Lookup(p)
+	return
+}
+
+func ERXCoSShapingPmtType_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXCoSShapingPmtType_LookupString(p)
+	return
+}
+
+func ERXCoSShapingPmtType_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 108) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXCoSShapingPmtType_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 108) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXCoSShapingPmtType_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 108)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXCoSShapingPmtType_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 108)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXCoSShapingPmtType_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 108, a)
+}
+
+func ERXCoSShapingPmtType_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 108, a)
+}
+
+func ERXCoSShapingPmtType_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 108)
+}
+
+func ERXDHCPGuidedRelayServer_Add(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPAddr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 109, a)
+}
+
+func ERXDHCPGuidedRelayServer_Get(p *radius.Packet) (value net.IP) {
+	value, _ = ERXDHCPGuidedRelayServer_Lookup(p)
+	return
+}
+
+func ERXDHCPGuidedRelayServer_Gets(p *radius.Packet) (values []net.IP, err error) {
+	var i net.IP
+	for _, attr := range _ERX_GetsVendor(p, 109) {
+		i, err = radius.IPAddr(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPGuidedRelayServer_Lookup(p *radius.Packet) (value net.IP, err error) {
+	a, ok := _ERX_LookupVendor(p, 109)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value, err = radius.IPAddr(a)
+	return
+}
+
+func ERXDHCPGuidedRelayServer_Set(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPAddr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 109, a)
+}
+
+func ERXDHCPGuidedRelayServer_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 109)
+}
+
+func ERXAccLoopCirID_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 110, a)
+}
+
+func ERXAccLoopCirID_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 110, a)
+}
+
+func ERXAccLoopCirID_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXAccLoopCirID_Lookup(p)
+	return
+}
+
+func ERXAccLoopCirID_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXAccLoopCirID_LookupString(p)
+	return
+}
+
+func ERXAccLoopCirID_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 110) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccLoopCirID_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 110) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccLoopCirID_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 110)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXAccLoopCirID_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 110)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXAccLoopCirID_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 110, a)
+}
+
+func ERXAccLoopCirID_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 110, a)
+}
+
+func ERXAccLoopCirID_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 110)
+}
+
+func ERXAccAggrCirIDBin_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 111, a)
+}
+
+func ERXAccAggrCirIDBin_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 111, a)
+}
+
+func ERXAccAggrCirIDBin_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXAccAggrCirIDBin_Lookup(p)
+	return
+}
+
+func ERXAccAggrCirIDBin_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXAccAggrCirIDBin_LookupString(p)
+	return
+}
+
+func ERXAccAggrCirIDBin_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 111) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccAggrCirIDBin_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 111) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccAggrCirIDBin_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 111)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXAccAggrCirIDBin_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 111)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXAccAggrCirIDBin_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 111, a)
+}
+
+func ERXAccAggrCirIDBin_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 111, a)
+}
+
+func ERXAccAggrCirIDBin_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 111)
+}
+
+func ERXAccAggrCirIDAsc_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 112, a)
+}
+
+func ERXAccAggrCirIDAsc_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 112, a)
+}
+
+func ERXAccAggrCirIDAsc_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXAccAggrCirIDAsc_Lookup(p)
+	return
+}
+
+func ERXAccAggrCirIDAsc_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXAccAggrCirIDAsc_LookupString(p)
+	return
+}
+
+func ERXAccAggrCirIDAsc_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 112) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccAggrCirIDAsc_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 112) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccAggrCirIDAsc_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 112)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXAccAggrCirIDAsc_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 112)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXAccAggrCirIDAsc_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 112, a)
+}
+
+func ERXAccAggrCirIDAsc_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 112, a)
+}
+
+func ERXAccAggrCirIDAsc_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 112)
+}
+
+type ERXActDataRateUp uint32
+
+var ERXActDataRateUp_Strings = map[ERXActDataRateUp]string{}
+
+func (a ERXActDataRateUp) String() string {
+	if str, ok := ERXActDataRateUp_Strings[a]; ok {
+		return str
+	}
+	return "ERXActDataRateUp(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXActDataRateUp_Add(p *radius.Packet, value ERXActDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 113, a)
+}
+
+func ERXActDataRateUp_Get(p *radius.Packet) (value ERXActDataRateUp) {
+	value, _ = ERXActDataRateUp_Lookup(p)
+	return
+}
+
+func ERXActDataRateUp_Gets(p *radius.Packet) (values []ERXActDataRateUp, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 113) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXActDataRateUp(i))
+	}
+	return
+}
+
+func ERXActDataRateUp_Lookup(p *radius.Packet) (value ERXActDataRateUp, err error) {
+	a, ok := _ERX_LookupVendor(p, 113)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXActDataRateUp(i)
+	return
+}
+
+func ERXActDataRateUp_Set(p *radius.Packet, value ERXActDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 113, a)
+}
+
+func ERXActDataRateUp_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 113)
+}
+
+type ERXActDataRateDn uint32
+
+var ERXActDataRateDn_Strings = map[ERXActDataRateDn]string{}
+
+func (a ERXActDataRateDn) String() string {
+	if str, ok := ERXActDataRateDn_Strings[a]; ok {
+		return str
+	}
+	return "ERXActDataRateDn(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXActDataRateDn_Add(p *radius.Packet, value ERXActDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 114, a)
+}
+
+func ERXActDataRateDn_Get(p *radius.Packet) (value ERXActDataRateDn) {
+	value, _ = ERXActDataRateDn_Lookup(p)
+	return
+}
+
+func ERXActDataRateDn_Gets(p *radius.Packet) (values []ERXActDataRateDn, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 114) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXActDataRateDn(i))
+	}
+	return
+}
+
+func ERXActDataRateDn_Lookup(p *radius.Packet) (value ERXActDataRateDn, err error) {
+	a, ok := _ERX_LookupVendor(p, 114)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXActDataRateDn(i)
+	return
+}
+
+func ERXActDataRateDn_Set(p *radius.Packet, value ERXActDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 114, a)
+}
+
+func ERXActDataRateDn_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 114)
+}
+
+type ERXMinDataRateUp uint32
+
+var ERXMinDataRateUp_Strings = map[ERXMinDataRateUp]string{}
+
+func (a ERXMinDataRateUp) String() string {
+	if str, ok := ERXMinDataRateUp_Strings[a]; ok {
+		return str
+	}
+	return "ERXMinDataRateUp(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMinDataRateUp_Add(p *radius.Packet, value ERXMinDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 115, a)
+}
+
+func ERXMinDataRateUp_Get(p *radius.Packet) (value ERXMinDataRateUp) {
+	value, _ = ERXMinDataRateUp_Lookup(p)
+	return
+}
+
+func ERXMinDataRateUp_Gets(p *radius.Packet) (values []ERXMinDataRateUp, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 115) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMinDataRateUp(i))
+	}
+	return
+}
+
+func ERXMinDataRateUp_Lookup(p *radius.Packet) (value ERXMinDataRateUp, err error) {
+	a, ok := _ERX_LookupVendor(p, 115)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMinDataRateUp(i)
+	return
+}
+
+func ERXMinDataRateUp_Set(p *radius.Packet, value ERXMinDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 115, a)
+}
+
+func ERXMinDataRateUp_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 115)
+}
+
+type ERXMinDataRateDn uint32
+
+var ERXMinDataRateDn_Strings = map[ERXMinDataRateDn]string{}
+
+func (a ERXMinDataRateDn) String() string {
+	if str, ok := ERXMinDataRateDn_Strings[a]; ok {
+		return str
+	}
+	return "ERXMinDataRateDn(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMinDataRateDn_Add(p *radius.Packet, value ERXMinDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 116, a)
+}
+
+func ERXMinDataRateDn_Get(p *radius.Packet) (value ERXMinDataRateDn) {
+	value, _ = ERXMinDataRateDn_Lookup(p)
+	return
+}
+
+func ERXMinDataRateDn_Gets(p *radius.Packet) (values []ERXMinDataRateDn, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 116) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMinDataRateDn(i))
+	}
+	return
+}
+
+func ERXMinDataRateDn_Lookup(p *radius.Packet) (value ERXMinDataRateDn, err error) {
+	a, ok := _ERX_LookupVendor(p, 116)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMinDataRateDn(i)
+	return
+}
+
+func ERXMinDataRateDn_Set(p *radius.Packet, value ERXMinDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 116, a)
+}
+
+func ERXMinDataRateDn_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 116)
+}
+
+type ERXAttDataRateUp uint32
+
+var ERXAttDataRateUp_Strings = map[ERXAttDataRateUp]string{}
+
+func (a ERXAttDataRateUp) String() string {
+	if str, ok := ERXAttDataRateUp_Strings[a]; ok {
+		return str
+	}
+	return "ERXAttDataRateUp(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXAttDataRateUp_Add(p *radius.Packet, value ERXAttDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 117, a)
+}
+
+func ERXAttDataRateUp_Get(p *radius.Packet) (value ERXAttDataRateUp) {
+	value, _ = ERXAttDataRateUp_Lookup(p)
+	return
+}
+
+func ERXAttDataRateUp_Gets(p *radius.Packet) (values []ERXAttDataRateUp, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 117) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXAttDataRateUp(i))
+	}
+	return
+}
+
+func ERXAttDataRateUp_Lookup(p *radius.Packet) (value ERXAttDataRateUp, err error) {
+	a, ok := _ERX_LookupVendor(p, 117)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXAttDataRateUp(i)
+	return
+}
+
+func ERXAttDataRateUp_Set(p *radius.Packet, value ERXAttDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 117, a)
+}
+
+func ERXAttDataRateUp_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 117)
+}
+
+type ERXAttDataRateDn uint32
+
+var ERXAttDataRateDn_Strings = map[ERXAttDataRateDn]string{}
+
+func (a ERXAttDataRateDn) String() string {
+	if str, ok := ERXAttDataRateDn_Strings[a]; ok {
+		return str
+	}
+	return "ERXAttDataRateDn(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXAttDataRateDn_Add(p *radius.Packet, value ERXAttDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 118, a)
+}
+
+func ERXAttDataRateDn_Get(p *radius.Packet) (value ERXAttDataRateDn) {
+	value, _ = ERXAttDataRateDn_Lookup(p)
+	return
+}
+
+func ERXAttDataRateDn_Gets(p *radius.Packet) (values []ERXAttDataRateDn, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 118) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXAttDataRateDn(i))
+	}
+	return
+}
+
+func ERXAttDataRateDn_Lookup(p *radius.Packet) (value ERXAttDataRateDn, err error) {
+	a, ok := _ERX_LookupVendor(p, 118)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXAttDataRateDn(i)
+	return
+}
+
+func ERXAttDataRateDn_Set(p *radius.Packet, value ERXAttDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 118, a)
+}
+
+func ERXAttDataRateDn_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 118)
+}
+
+type ERXMaxDataRateUp uint32
+
+var ERXMaxDataRateUp_Strings = map[ERXMaxDataRateUp]string{}
+
+func (a ERXMaxDataRateUp) String() string {
+	if str, ok := ERXMaxDataRateUp_Strings[a]; ok {
+		return str
+	}
+	return "ERXMaxDataRateUp(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMaxDataRateUp_Add(p *radius.Packet, value ERXMaxDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 119, a)
+}
+
+func ERXMaxDataRateUp_Get(p *radius.Packet) (value ERXMaxDataRateUp) {
+	value, _ = ERXMaxDataRateUp_Lookup(p)
+	return
+}
+
+func ERXMaxDataRateUp_Gets(p *radius.Packet) (values []ERXMaxDataRateUp, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 119) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMaxDataRateUp(i))
+	}
+	return
+}
+
+func ERXMaxDataRateUp_Lookup(p *radius.Packet) (value ERXMaxDataRateUp, err error) {
+	a, ok := _ERX_LookupVendor(p, 119)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMaxDataRateUp(i)
+	return
+}
+
+func ERXMaxDataRateUp_Set(p *radius.Packet, value ERXMaxDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 119, a)
+}
+
+func ERXMaxDataRateUp_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 119)
+}
+
+type ERXMaxDataRateDn uint32
+
+var ERXMaxDataRateDn_Strings = map[ERXMaxDataRateDn]string{}
+
+func (a ERXMaxDataRateDn) String() string {
+	if str, ok := ERXMaxDataRateDn_Strings[a]; ok {
+		return str
+	}
+	return "ERXMaxDataRateDn(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMaxDataRateDn_Add(p *radius.Packet, value ERXMaxDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 120, a)
+}
+
+func ERXMaxDataRateDn_Get(p *radius.Packet) (value ERXMaxDataRateDn) {
+	value, _ = ERXMaxDataRateDn_Lookup(p)
+	return
+}
+
+func ERXMaxDataRateDn_Gets(p *radius.Packet) (values []ERXMaxDataRateDn, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 120) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMaxDataRateDn(i))
+	}
+	return
+}
+
+func ERXMaxDataRateDn_Lookup(p *radius.Packet) (value ERXMaxDataRateDn, err error) {
+	a, ok := _ERX_LookupVendor(p, 120)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMaxDataRateDn(i)
+	return
+}
+
+func ERXMaxDataRateDn_Set(p *radius.Packet, value ERXMaxDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 120, a)
+}
+
+func ERXMaxDataRateDn_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 120)
+}
+
+type ERXMinLPDataRateUp uint32
+
+var ERXMinLPDataRateUp_Strings = map[ERXMinLPDataRateUp]string{}
+
+func (a ERXMinLPDataRateUp) String() string {
+	if str, ok := ERXMinLPDataRateUp_Strings[a]; ok {
+		return str
+	}
+	return "ERXMinLPDataRateUp(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMinLPDataRateUp_Add(p *radius.Packet, value ERXMinLPDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 121, a)
+}
+
+func ERXMinLPDataRateUp_Get(p *radius.Packet) (value ERXMinLPDataRateUp) {
+	value, _ = ERXMinLPDataRateUp_Lookup(p)
+	return
+}
+
+func ERXMinLPDataRateUp_Gets(p *radius.Packet) (values []ERXMinLPDataRateUp, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 121) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMinLPDataRateUp(i))
+	}
+	return
+}
+
+func ERXMinLPDataRateUp_Lookup(p *radius.Packet) (value ERXMinLPDataRateUp, err error) {
+	a, ok := _ERX_LookupVendor(p, 121)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMinLPDataRateUp(i)
+	return
+}
+
+func ERXMinLPDataRateUp_Set(p *radius.Packet, value ERXMinLPDataRateUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 121, a)
+}
+
+func ERXMinLPDataRateUp_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 121)
+}
+
+type ERXMinLPDataRateDn uint32
+
+var ERXMinLPDataRateDn_Strings = map[ERXMinLPDataRateDn]string{}
+
+func (a ERXMinLPDataRateDn) String() string {
+	if str, ok := ERXMinLPDataRateDn_Strings[a]; ok {
+		return str
+	}
+	return "ERXMinLPDataRateDn(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMinLPDataRateDn_Add(p *radius.Packet, value ERXMinLPDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 122, a)
+}
+
+func ERXMinLPDataRateDn_Get(p *radius.Packet) (value ERXMinLPDataRateDn) {
+	value, _ = ERXMinLPDataRateDn_Lookup(p)
+	return
+}
+
+func ERXMinLPDataRateDn_Gets(p *radius.Packet) (values []ERXMinLPDataRateDn, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 122) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMinLPDataRateDn(i))
+	}
+	return
+}
+
+func ERXMinLPDataRateDn_Lookup(p *radius.Packet) (value ERXMinLPDataRateDn, err error) {
+	a, ok := _ERX_LookupVendor(p, 122)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMinLPDataRateDn(i)
+	return
+}
+
+func ERXMinLPDataRateDn_Set(p *radius.Packet, value ERXMinLPDataRateDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 122, a)
+}
+
+func ERXMinLPDataRateDn_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 122)
+}
+
+type ERXMaxInterlvDelayUp uint32
+
+var ERXMaxInterlvDelayUp_Strings = map[ERXMaxInterlvDelayUp]string{}
+
+func (a ERXMaxInterlvDelayUp) String() string {
+	if str, ok := ERXMaxInterlvDelayUp_Strings[a]; ok {
+		return str
+	}
+	return "ERXMaxInterlvDelayUp(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMaxInterlvDelayUp_Add(p *radius.Packet, value ERXMaxInterlvDelayUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 123, a)
+}
+
+func ERXMaxInterlvDelayUp_Get(p *radius.Packet) (value ERXMaxInterlvDelayUp) {
+	value, _ = ERXMaxInterlvDelayUp_Lookup(p)
+	return
+}
+
+func ERXMaxInterlvDelayUp_Gets(p *radius.Packet) (values []ERXMaxInterlvDelayUp, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 123) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMaxInterlvDelayUp(i))
+	}
+	return
+}
+
+func ERXMaxInterlvDelayUp_Lookup(p *radius.Packet) (value ERXMaxInterlvDelayUp, err error) {
+	a, ok := _ERX_LookupVendor(p, 123)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMaxInterlvDelayUp(i)
+	return
+}
+
+func ERXMaxInterlvDelayUp_Set(p *radius.Packet, value ERXMaxInterlvDelayUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 123, a)
+}
+
+func ERXMaxInterlvDelayUp_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 123)
+}
+
+type ERXActInterlvDelayUp uint32
+
+var ERXActInterlvDelayUp_Strings = map[ERXActInterlvDelayUp]string{}
+
+func (a ERXActInterlvDelayUp) String() string {
+	if str, ok := ERXActInterlvDelayUp_Strings[a]; ok {
+		return str
+	}
+	return "ERXActInterlvDelayUp(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXActInterlvDelayUp_Add(p *radius.Packet, value ERXActInterlvDelayUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 124, a)
+}
+
+func ERXActInterlvDelayUp_Get(p *radius.Packet) (value ERXActInterlvDelayUp) {
+	value, _ = ERXActInterlvDelayUp_Lookup(p)
+	return
+}
+
+func ERXActInterlvDelayUp_Gets(p *radius.Packet) (values []ERXActInterlvDelayUp, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 124) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXActInterlvDelayUp(i))
+	}
+	return
+}
+
+func ERXActInterlvDelayUp_Lookup(p *radius.Packet) (value ERXActInterlvDelayUp, err error) {
+	a, ok := _ERX_LookupVendor(p, 124)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXActInterlvDelayUp(i)
+	return
+}
+
+func ERXActInterlvDelayUp_Set(p *radius.Packet, value ERXActInterlvDelayUp) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 124, a)
+}
+
+func ERXActInterlvDelayUp_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 124)
+}
+
+type ERXMaxInterlvDelayDn uint32
+
+var ERXMaxInterlvDelayDn_Strings = map[ERXMaxInterlvDelayDn]string{}
+
+func (a ERXMaxInterlvDelayDn) String() string {
+	if str, ok := ERXMaxInterlvDelayDn_Strings[a]; ok {
+		return str
+	}
+	return "ERXMaxInterlvDelayDn(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMaxInterlvDelayDn_Add(p *radius.Packet, value ERXMaxInterlvDelayDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 125, a)
+}
+
+func ERXMaxInterlvDelayDn_Get(p *radius.Packet) (value ERXMaxInterlvDelayDn) {
+	value, _ = ERXMaxInterlvDelayDn_Lookup(p)
+	return
+}
+
+func ERXMaxInterlvDelayDn_Gets(p *radius.Packet) (values []ERXMaxInterlvDelayDn, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 125) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMaxInterlvDelayDn(i))
+	}
+	return
+}
+
+func ERXMaxInterlvDelayDn_Lookup(p *radius.Packet) (value ERXMaxInterlvDelayDn, err error) {
+	a, ok := _ERX_LookupVendor(p, 125)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMaxInterlvDelayDn(i)
+	return
+}
+
+func ERXMaxInterlvDelayDn_Set(p *radius.Packet, value ERXMaxInterlvDelayDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 125, a)
+}
+
+func ERXMaxInterlvDelayDn_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 125)
+}
+
+type ERXActInterlvDelayDn uint32
+
+var ERXActInterlvDelayDn_Strings = map[ERXActInterlvDelayDn]string{}
+
+func (a ERXActInterlvDelayDn) String() string {
+	if str, ok := ERXActInterlvDelayDn_Strings[a]; ok {
+		return str
+	}
+	return "ERXActInterlvDelayDn(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXActInterlvDelayDn_Add(p *radius.Packet, value ERXActInterlvDelayDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 126, a)
+}
+
+func ERXActInterlvDelayDn_Get(p *radius.Packet) (value ERXActInterlvDelayDn) {
+	value, _ = ERXActInterlvDelayDn_Lookup(p)
+	return
+}
+
+func ERXActInterlvDelayDn_Gets(p *radius.Packet) (values []ERXActInterlvDelayDn, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 126) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXActInterlvDelayDn(i))
+	}
+	return
+}
+
+func ERXActInterlvDelayDn_Lookup(p *radius.Packet) (value ERXActInterlvDelayDn, err error) {
+	a, ok := _ERX_LookupVendor(p, 126)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXActInterlvDelayDn(i)
+	return
+}
+
+func ERXActInterlvDelayDn_Set(p *radius.Packet, value ERXActInterlvDelayDn) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 126, a)
+}
+
+func ERXActInterlvDelayDn_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 126)
+}
+
+type ERXDSLLineState uint32
+
+const (
+	ERXDSLLineState_Value_SHOWTIME ERXDSLLineState = 1
+	ERXDSLLineState_Value_IDLE     ERXDSLLineState = 2
+	ERXDSLLineState_Value_SILENT   ERXDSLLineState = 3
+)
+
+var ERXDSLLineState_Strings = map[ERXDSLLineState]string{
+	ERXDSLLineState_Value_SHOWTIME: "SHOWTIME",
+	ERXDSLLineState_Value_IDLE:     "IDLE",
+	ERXDSLLineState_Value_SILENT:   "SILENT",
+}
+
+func (a ERXDSLLineState) String() string {
+	if str, ok := ERXDSLLineState_Strings[a]; ok {
+		return str
+	}
+	return "ERXDSLLineState(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXDSLLineState_Add(p *radius.Packet, value ERXDSLLineState) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 127, a)
+}
+
+func ERXDSLLineState_Get(p *radius.Packet) (value ERXDSLLineState) {
+	value, _ = ERXDSLLineState_Lookup(p)
+	return
+}
+
+func ERXDSLLineState_Gets(p *radius.Packet) (values []ERXDSLLineState, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 127) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXDSLLineState(i))
+	}
+	return
+}
+
+func ERXDSLLineState_Lookup(p *radius.Packet) (value ERXDSLLineState, err error) {
+	a, ok := _ERX_LookupVendor(p, 127)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXDSLLineState(i)
+	return
+}
+
+func ERXDSLLineState_Set(p *radius.Packet, value ERXDSLLineState) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 127, a)
+}
+
+func ERXDSLLineState_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 127)
+}
+
+type ERXDSLType uint32
+
+const (
+	ERXDSLType_Value_ADSL1     ERXDSLType = 1
+	ERXDSLType_Value_ADSL2     ERXDSLType = 2
+	ERXDSLType_Value_ADSL2PLUS ERXDSLType = 3
+	ERXDSLType_Value_VDSL1     ERXDSLType = 4
+	ERXDSLType_Value_VDSL2     ERXDSLType = 5
+	ERXDSLType_Value_SDSL      ERXDSLType = 6
+	ERXDSLType_Value_UNKNOWN   ERXDSLType = 7
+)
+
+var ERXDSLType_Strings = map[ERXDSLType]string{
+	ERXDSLType_Value_ADSL1:     "ADSL1",
+	ERXDSLType_Value_ADSL2:     "ADSL2",
+	ERXDSLType_Value_ADSL2PLUS: "ADSL2PLUS",
+	ERXDSLType_Value_VDSL1:     "VDSL1",
+	ERXDSLType_Value_VDSL2:     "VDSL2",
+	ERXDSLType_Value_SDSL:      "SDSL",
+	ERXDSLType_Value_UNKNOWN:   "UNKNOWN",
+}
+
+func (a ERXDSLType) String() string {
+	if str, ok := ERXDSLType_Strings[a]; ok {
+		return str
+	}
+	return "ERXDSLType(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXDSLType_Add(p *radius.Packet, value ERXDSLType) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 128, a)
+}
+
+func ERXDSLType_Get(p *radius.Packet) (value ERXDSLType) {
+	value, _ = ERXDSLType_Lookup(p)
+	return
+}
+
+func ERXDSLType_Gets(p *radius.Packet) (values []ERXDSLType, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 128) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXDSLType(i))
+	}
+	return
+}
+
+func ERXDSLType_Lookup(p *radius.Packet) (value ERXDSLType, err error) {
+	a, ok := _ERX_LookupVendor(p, 128)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXDSLType(i)
+	return
+}
+
+func ERXDSLType_Set(p *radius.Packet, value ERXDSLType) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 128, a)
+}
+
+func ERXDSLType_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 128)
+}
+
+func ERXIPv6NdRaPrefix_Add(p *radius.Packet, value *net.IPNet) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPv6Prefix(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 129, a)
+}
+
+func ERXIPv6NdRaPrefix_Get(p *radius.Packet) (value *net.IPNet) {
+	value, _ = ERXIPv6NdRaPrefix_Lookup(p)
+	return
+}
+
+func ERXIPv6NdRaPrefix_Gets(p *radius.Packet) (values []*net.IPNet, err error) {
+	var i *net.IPNet
+	for _, attr := range _ERX_GetsVendor(p, 129) {
+		i, err = radius.IPv6Prefix(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6NdRaPrefix_Lookup(p *radius.Packet) (value *net.IPNet, err error) {
+	a, ok := _ERX_LookupVendor(p, 129)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value, err = radius.IPv6Prefix(a)
+	return
+}
+
+func ERXIPv6NdRaPrefix_Set(p *radius.Packet, value *net.IPNet) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPv6Prefix(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 129, a)
+}
+
+func ERXIPv6NdRaPrefix_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 129)
+}
+
+func ERXQosSetName_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 130, a)
+}
+
+func ERXQosSetName_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 130, a)
+}
+
+func ERXQosSetName_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXQosSetName_Lookup(p)
+	return
+}
+
+func ERXQosSetName_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXQosSetName_LookupString(p)
+	return
+}
+
+func ERXQosSetName_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 130) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXQosSetName_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 130) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXQosSetName_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 130)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXQosSetName_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 130)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXQosSetName_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 130, a)
+}
+
+func ERXQosSetName_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 130, a)
+}
+
+func ERXQosSetName_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 130)
+}
+
+type ERXServiceAcctInterval uint32
+
+var ERXServiceAcctInterval_Strings = map[ERXServiceAcctInterval]string{}
+
+func (a ERXServiceAcctInterval) String() string {
+	if str, ok := ERXServiceAcctInterval_Strings[a]; ok {
+		return str
+	}
+	return "ERXServiceAcctInterval(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXServiceAcctInterval_Add(p *radius.Packet, tag byte, value ERXServiceAcctInterval) (err error) {
+	a := radius.NewInteger(uint32(value))
+	if tag >= 0x01 && tag <= 0x1F {
+		a[0] = tag
+	} else {
+		a[0] = 0x00
+	}
+	return _ERX_AddVendor(p, 140, a)
+}
+
+func ERXServiceAcctInterval_Get(p *radius.Packet) (tag byte, value ERXServiceAcctInterval) {
+	tag, value, _ = ERXServiceAcctInterval_Lookup(p)
+	return
+}
+
+func ERXServiceAcctInterval_Gets(p *radius.Packet) (tags []byte, values []ERXServiceAcctInterval, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 140) {
+		var tag byte
+		if len(attr) >= 1 && attr[0] <= 0x1F {
+			tag = attr[0]
+			attr[0] = 0x00
+		}
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXServiceAcctInterval(i))
+		tags = append(tags, tag)
+	}
+	return
+}
+
+func ERXServiceAcctInterval_Lookup(p *radius.Packet) (tag byte, value ERXServiceAcctInterval, err error) {
+	a, ok := _ERX_LookupVendor(p, 140)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	if len(a) >= 1 && a[0] <= 0x1F {
+		tag = a[0]
+		a[0] = 0x00
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXServiceAcctInterval(i)
+	return
+}
+
+func ERXServiceAcctInterval_Set(p *radius.Packet, tag byte, value ERXServiceAcctInterval) (err error) {
+	a := radius.NewInteger(uint32(value))
+	if tag >= 0x01 && tag <= 0x1F {
+		a[0] = tag
+	} else {
+		a[0] = 0x00
+	}
+	return _ERX_SetVendor(p, 140, a)
+}
+
+func ERXServiceAcctInterval_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 140)
+}
+
+type ERXDownStreamCalcRate uint32
+
+var ERXDownStreamCalcRate_Strings = map[ERXDownStreamCalcRate]string{}
+
+func (a ERXDownStreamCalcRate) String() string {
+	if str, ok := ERXDownStreamCalcRate_Strings[a]; ok {
+		return str
+	}
+	return "ERXDownStreamCalcRate(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXDownStreamCalcRate_Add(p *radius.Packet, value ERXDownStreamCalcRate) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 141, a)
+}
+
+func ERXDownStreamCalcRate_Get(p *radius.Packet) (value ERXDownStreamCalcRate) {
+	value, _ = ERXDownStreamCalcRate_Lookup(p)
+	return
+}
+
+func ERXDownStreamCalcRate_Gets(p *radius.Packet) (values []ERXDownStreamCalcRate, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 141) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXDownStreamCalcRate(i))
+	}
+	return
+}
+
+func ERXDownStreamCalcRate_Lookup(p *radius.Packet) (value ERXDownStreamCalcRate, err error) {
+	a, ok := _ERX_LookupVendor(p, 141)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXDownStreamCalcRate(i)
+	return
+}
+
+func ERXDownStreamCalcRate_Set(p *radius.Packet, value ERXDownStreamCalcRate) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 141, a)
+}
+
+func ERXDownStreamCalcRate_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 141)
+}
+
+type ERXUpStreamCalcRate uint32
+
+var ERXUpStreamCalcRate_Strings = map[ERXUpStreamCalcRate]string{}
+
+func (a ERXUpStreamCalcRate) String() string {
+	if str, ok := ERXUpStreamCalcRate_Strings[a]; ok {
+		return str
+	}
+	return "ERXUpStreamCalcRate(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXUpStreamCalcRate_Add(p *radius.Packet, value ERXUpStreamCalcRate) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 142, a)
+}
+
+func ERXUpStreamCalcRate_Get(p *radius.Packet) (value ERXUpStreamCalcRate) {
+	value, _ = ERXUpStreamCalcRate_Lookup(p)
+	return
+}
+
+func ERXUpStreamCalcRate_Gets(p *radius.Packet) (values []ERXUpStreamCalcRate, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 142) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXUpStreamCalcRate(i))
+	}
+	return
+}
+
+func ERXUpStreamCalcRate_Lookup(p *radius.Packet) (value ERXUpStreamCalcRate, err error) {
+	a, ok := _ERX_LookupVendor(p, 142)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXUpStreamCalcRate(i)
+	return
+}
+
+func ERXUpStreamCalcRate_Set(p *radius.Packet, value ERXUpStreamCalcRate) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 142, a)
+}
+
+func ERXUpStreamCalcRate_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 142)
+}
+
+type ERXMaxClientsPerInterface uint32
+
+var ERXMaxClientsPerInterface_Strings = map[ERXMaxClientsPerInterface]string{}
+
+func (a ERXMaxClientsPerInterface) String() string {
+	if str, ok := ERXMaxClientsPerInterface_Strings[a]; ok {
+		return str
+	}
+	return "ERXMaxClientsPerInterface(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXMaxClientsPerInterface_Add(p *radius.Packet, value ERXMaxClientsPerInterface) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 143, a)
+}
+
+func ERXMaxClientsPerInterface_Get(p *radius.Packet) (value ERXMaxClientsPerInterface) {
+	value, _ = ERXMaxClientsPerInterface_Lookup(p)
+	return
+}
+
+func ERXMaxClientsPerInterface_Gets(p *radius.Packet) (values []ERXMaxClientsPerInterface, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 143) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXMaxClientsPerInterface(i))
+	}
+	return
+}
+
+func ERXMaxClientsPerInterface_Lookup(p *radius.Packet) (value ERXMaxClientsPerInterface, err error) {
+	a, ok := _ERX_LookupVendor(p, 143)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXMaxClientsPerInterface(i)
+	return
+}
+
+func ERXMaxClientsPerInterface_Set(p *radius.Packet, value ERXMaxClientsPerInterface) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 143, a)
+}
+
+func ERXMaxClientsPerInterface_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 143)
+}
+
+type ERXPPPMonitorIngressOnly uint32
+
+const (
+	ERXPPPMonitorIngressOnly_Value_Disabled ERXPPPMonitorIngressOnly = 0
+	ERXPPPMonitorIngressOnly_Value_Enabled  ERXPPPMonitorIngressOnly = 1
+)
+
+var ERXPPPMonitorIngressOnly_Strings = map[ERXPPPMonitorIngressOnly]string{
+	ERXPPPMonitorIngressOnly_Value_Disabled: "disabled",
+	ERXPPPMonitorIngressOnly_Value_Enabled:  "enabled",
+}
+
+func (a ERXPPPMonitorIngressOnly) String() string {
+	if str, ok := ERXPPPMonitorIngressOnly_Strings[a]; ok {
+		return str
+	}
+	return "ERXPPPMonitorIngressOnly(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXPPPMonitorIngressOnly_Add(p *radius.Packet, value ERXPPPMonitorIngressOnly) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 144, a)
+}
+
+func ERXPPPMonitorIngressOnly_Get(p *radius.Packet) (value ERXPPPMonitorIngressOnly) {
+	value, _ = ERXPPPMonitorIngressOnly_Lookup(p)
+	return
+}
+
+func ERXPPPMonitorIngressOnly_Gets(p *radius.Packet) (values []ERXPPPMonitorIngressOnly, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 144) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXPPPMonitorIngressOnly(i))
+	}
+	return
+}
+
+func ERXPPPMonitorIngressOnly_Lookup(p *radius.Packet) (value ERXPPPMonitorIngressOnly, err error) {
+	a, ok := _ERX_LookupVendor(p, 144)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXPPPMonitorIngressOnly(i)
+	return
+}
+
+func ERXPPPMonitorIngressOnly_Set(p *radius.Packet, value ERXPPPMonitorIngressOnly) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 144, a)
+}
+
+func ERXPPPMonitorIngressOnly_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 144)
+}
+
+func ERXCoSSchedulerPmtType_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 146, a)
+}
+
+func ERXCoSSchedulerPmtType_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 146, a)
+}
+
+func ERXCoSSchedulerPmtType_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXCoSSchedulerPmtType_Lookup(p)
+	return
+}
+
+func ERXCoSSchedulerPmtType_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXCoSSchedulerPmtType_LookupString(p)
+	return
+}
+
+func ERXCoSSchedulerPmtType_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 146) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXCoSSchedulerPmtType_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 146) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXCoSSchedulerPmtType_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 146)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXCoSSchedulerPmtType_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 146)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXCoSSchedulerPmtType_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 146, a)
+}
+
+func ERXCoSSchedulerPmtType_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 146, a)
+}
+
+func ERXCoSSchedulerPmtType_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 146)
+}
+
+func ERXBackupAddressPool_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 147, a)
+}
+
+func ERXBackupAddressPool_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 147, a)
+}
+
+func ERXBackupAddressPool_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXBackupAddressPool_Lookup(p)
+	return
+}
+
+func ERXBackupAddressPool_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXBackupAddressPool_LookupString(p)
+	return
+}
+
+func ERXBackupAddressPool_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 147) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXBackupAddressPool_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 147) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXBackupAddressPool_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 147)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXBackupAddressPool_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 147)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXBackupAddressPool_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 147, a)
+}
+
+func ERXBackupAddressPool_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 147, a)
+}
+
+func ERXBackupAddressPool_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 147)
+}
+
+func ERXICRPartitionID_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 150, a)
+}
+
+func ERXICRPartitionID_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 150, a)
+}
+
+func ERXICRPartitionID_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXICRPartitionID_Lookup(p)
+	return
+}
+
+func ERXICRPartitionID_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXICRPartitionID_LookupString(p)
+	return
+}
+
+func ERXICRPartitionID_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 150) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXICRPartitionID_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 150) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXICRPartitionID_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 150)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXICRPartitionID_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 150)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXICRPartitionID_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 150, a)
+}
+
+func ERXICRPartitionID_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 150, a)
+}
+
+func ERXICRPartitionID_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 150)
+}
+
+type ERXIPv6AcctInputOctets uint32
+
+var ERXIPv6AcctInputOctets_Strings = map[ERXIPv6AcctInputOctets]string{}
+
+func (a ERXIPv6AcctInputOctets) String() string {
+	if str, ok := ERXIPv6AcctInputOctets_Strings[a]; ok {
+		return str
+	}
+	return "ERXIPv6AcctInputOctets(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIPv6AcctInputOctets_Add(p *radius.Packet, value ERXIPv6AcctInputOctets) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 151, a)
+}
+
+func ERXIPv6AcctInputOctets_Get(p *radius.Packet) (value ERXIPv6AcctInputOctets) {
+	value, _ = ERXIPv6AcctInputOctets_Lookup(p)
+	return
+}
+
+func ERXIPv6AcctInputOctets_Gets(p *radius.Packet) (values []ERXIPv6AcctInputOctets, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 151) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIPv6AcctInputOctets(i))
+	}
+	return
+}
+
+func ERXIPv6AcctInputOctets_Lookup(p *radius.Packet) (value ERXIPv6AcctInputOctets, err error) {
+	a, ok := _ERX_LookupVendor(p, 151)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIPv6AcctInputOctets(i)
+	return
+}
+
+func ERXIPv6AcctInputOctets_Set(p *radius.Packet, value ERXIPv6AcctInputOctets) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 151, a)
+}
+
+func ERXIPv6AcctInputOctets_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 151)
+}
+
+type ERXIPv6AcctOutputOctets uint32
+
+var ERXIPv6AcctOutputOctets_Strings = map[ERXIPv6AcctOutputOctets]string{}
+
+func (a ERXIPv6AcctOutputOctets) String() string {
+	if str, ok := ERXIPv6AcctOutputOctets_Strings[a]; ok {
+		return str
+	}
+	return "ERXIPv6AcctOutputOctets(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIPv6AcctOutputOctets_Add(p *radius.Packet, value ERXIPv6AcctOutputOctets) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 152, a)
+}
+
+func ERXIPv6AcctOutputOctets_Get(p *radius.Packet) (value ERXIPv6AcctOutputOctets) {
+	value, _ = ERXIPv6AcctOutputOctets_Lookup(p)
+	return
+}
+
+func ERXIPv6AcctOutputOctets_Gets(p *radius.Packet) (values []ERXIPv6AcctOutputOctets, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 152) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIPv6AcctOutputOctets(i))
+	}
+	return
+}
+
+func ERXIPv6AcctOutputOctets_Lookup(p *radius.Packet) (value ERXIPv6AcctOutputOctets, err error) {
+	a, ok := _ERX_LookupVendor(p, 152)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIPv6AcctOutputOctets(i)
+	return
+}
+
+func ERXIPv6AcctOutputOctets_Set(p *radius.Packet, value ERXIPv6AcctOutputOctets) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 152, a)
+}
+
+func ERXIPv6AcctOutputOctets_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 152)
+}
+
+type ERXIPv6AcctInputPackets uint32
+
+var ERXIPv6AcctInputPackets_Strings = map[ERXIPv6AcctInputPackets]string{}
+
+func (a ERXIPv6AcctInputPackets) String() string {
+	if str, ok := ERXIPv6AcctInputPackets_Strings[a]; ok {
+		return str
+	}
+	return "ERXIPv6AcctInputPackets(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIPv6AcctInputPackets_Add(p *radius.Packet, value ERXIPv6AcctInputPackets) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 153, a)
+}
+
+func ERXIPv6AcctInputPackets_Get(p *radius.Packet) (value ERXIPv6AcctInputPackets) {
+	value, _ = ERXIPv6AcctInputPackets_Lookup(p)
+	return
+}
+
+func ERXIPv6AcctInputPackets_Gets(p *radius.Packet) (values []ERXIPv6AcctInputPackets, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 153) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIPv6AcctInputPackets(i))
+	}
+	return
+}
+
+func ERXIPv6AcctInputPackets_Lookup(p *radius.Packet) (value ERXIPv6AcctInputPackets, err error) {
+	a, ok := _ERX_LookupVendor(p, 153)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIPv6AcctInputPackets(i)
+	return
+}
+
+func ERXIPv6AcctInputPackets_Set(p *radius.Packet, value ERXIPv6AcctInputPackets) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 153, a)
+}
+
+func ERXIPv6AcctInputPackets_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 153)
+}
+
+type ERXIPv6AcctOutputPackets uint32
+
+var ERXIPv6AcctOutputPackets_Strings = map[ERXIPv6AcctOutputPackets]string{}
+
+func (a ERXIPv6AcctOutputPackets) String() string {
+	if str, ok := ERXIPv6AcctOutputPackets_Strings[a]; ok {
+		return str
+	}
+	return "ERXIPv6AcctOutputPackets(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIPv6AcctOutputPackets_Add(p *radius.Packet, value ERXIPv6AcctOutputPackets) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 154, a)
+}
+
+func ERXIPv6AcctOutputPackets_Get(p *radius.Packet) (value ERXIPv6AcctOutputPackets) {
+	value, _ = ERXIPv6AcctOutputPackets_Lookup(p)
+	return
+}
+
+func ERXIPv6AcctOutputPackets_Gets(p *radius.Packet) (values []ERXIPv6AcctOutputPackets, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 154) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIPv6AcctOutputPackets(i))
+	}
+	return
+}
+
+func ERXIPv6AcctOutputPackets_Lookup(p *radius.Packet) (value ERXIPv6AcctOutputPackets, err error) {
+	a, ok := _ERX_LookupVendor(p, 154)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIPv6AcctOutputPackets(i)
+	return
+}
+
+func ERXIPv6AcctOutputPackets_Set(p *radius.Packet, value ERXIPv6AcctOutputPackets) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 154, a)
+}
+
+func ERXIPv6AcctOutputPackets_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 154)
+}
+
+type ERXIPv6AcctInputGigawords uint32
+
+var ERXIPv6AcctInputGigawords_Strings = map[ERXIPv6AcctInputGigawords]string{}
+
+func (a ERXIPv6AcctInputGigawords) String() string {
+	if str, ok := ERXIPv6AcctInputGigawords_Strings[a]; ok {
+		return str
+	}
+	return "ERXIPv6AcctInputGigawords(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIPv6AcctInputGigawords_Add(p *radius.Packet, value ERXIPv6AcctInputGigawords) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 155, a)
+}
+
+func ERXIPv6AcctInputGigawords_Get(p *radius.Packet) (value ERXIPv6AcctInputGigawords) {
+	value, _ = ERXIPv6AcctInputGigawords_Lookup(p)
+	return
+}
+
+func ERXIPv6AcctInputGigawords_Gets(p *radius.Packet) (values []ERXIPv6AcctInputGigawords, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 155) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIPv6AcctInputGigawords(i))
+	}
+	return
+}
+
+func ERXIPv6AcctInputGigawords_Lookup(p *radius.Packet) (value ERXIPv6AcctInputGigawords, err error) {
+	a, ok := _ERX_LookupVendor(p, 155)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIPv6AcctInputGigawords(i)
+	return
+}
+
+func ERXIPv6AcctInputGigawords_Set(p *radius.Packet, value ERXIPv6AcctInputGigawords) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 155, a)
+}
+
+func ERXIPv6AcctInputGigawords_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 155)
+}
+
+type ERXIPv6AcctOutputGigawords uint32
+
+var ERXIPv6AcctOutputGigawords_Strings = map[ERXIPv6AcctOutputGigawords]string{}
+
+func (a ERXIPv6AcctOutputGigawords) String() string {
+	if str, ok := ERXIPv6AcctOutputGigawords_Strings[a]; ok {
+		return str
+	}
+	return "ERXIPv6AcctOutputGigawords(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXIPv6AcctOutputGigawords_Add(p *radius.Packet, value ERXIPv6AcctOutputGigawords) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 156, a)
+}
+
+func ERXIPv6AcctOutputGigawords_Get(p *radius.Packet) (value ERXIPv6AcctOutputGigawords) {
+	value, _ = ERXIPv6AcctOutputGigawords_Lookup(p)
+	return
+}
+
+func ERXIPv6AcctOutputGigawords_Gets(p *radius.Packet) (values []ERXIPv6AcctOutputGigawords, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 156) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXIPv6AcctOutputGigawords(i))
+	}
+	return
+}
+
+func ERXIPv6AcctOutputGigawords_Lookup(p *radius.Packet) (value ERXIPv6AcctOutputGigawords, err error) {
+	a, ok := _ERX_LookupVendor(p, 156)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXIPv6AcctOutputGigawords(i)
+	return
+}
+
+func ERXIPv6AcctOutputGigawords_Set(p *radius.Packet, value ERXIPv6AcctOutputGigawords) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 156, a)
+}
+
+func ERXIPv6AcctOutputGigawords_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 156)
+}
+
+func ERXIPv6NdRaPoolName_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 157, a)
+}
+
+func ERXIPv6NdRaPoolName_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 157, a)
+}
+
+func ERXIPv6NdRaPoolName_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv6NdRaPoolName_Lookup(p)
+	return
+}
+
+func ERXIPv6NdRaPoolName_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv6NdRaPoolName_LookupString(p)
+	return
+}
+
+func ERXIPv6NdRaPoolName_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 157) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6NdRaPoolName_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 157) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6NdRaPoolName_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 157)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv6NdRaPoolName_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 157)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv6NdRaPoolName_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 157, a)
+}
+
+func ERXIPv6NdRaPoolName_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 157, a)
+}
+
+func ERXIPv6NdRaPoolName_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 157)
+}
+
+func ERXPppoEPadn_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 158, a)
+}
+
+func ERXPppoEPadn_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 158, a)
+}
+
+func ERXPppoEPadn_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXPppoEPadn_Lookup(p)
+	return
+}
+
+func ERXPppoEPadn_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXPppoEPadn_LookupString(p)
+	return
+}
+
+func ERXPppoEPadn_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 158) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXPppoEPadn_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 158) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXPppoEPadn_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 158)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXPppoEPadn_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 158)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXPppoEPadn_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 158, a)
+}
+
+func ERXPppoEPadn_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 158, a)
+}
+
+func ERXPppoEPadn_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 158)
+}
+
+func ERXDhcpOption82_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 159, a)
+}
+
+func ERXDhcpOption82_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 159, a)
+}
+
+func ERXDhcpOption82_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXDhcpOption82_Lookup(p)
+	return
+}
+
+func ERXDhcpOption82_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXDhcpOption82_LookupString(p)
+	return
+}
+
+func ERXDhcpOption82_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 159) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDhcpOption82_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 159) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDhcpOption82_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 159)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXDhcpOption82_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 159)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXDhcpOption82_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 159, a)
+}
+
+func ERXDhcpOption82_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 159, a)
+}
+
+func ERXDhcpOption82_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 159)
+}
+
+type ERXVlanMapID uint32
+
+var ERXVlanMapID_Strings = map[ERXVlanMapID]string{}
+
+func (a ERXVlanMapID) String() string {
+	if str, ok := ERXVlanMapID_Strings[a]; ok {
+		return str
+	}
+	return "ERXVlanMapID(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXVlanMapID_Add(p *radius.Packet, value ERXVlanMapID) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 160, a)
+}
+
+func ERXVlanMapID_Get(p *radius.Packet) (value ERXVlanMapID) {
+	value, _ = ERXVlanMapID_Lookup(p)
+	return
+}
+
+func ERXVlanMapID_Gets(p *radius.Packet) (values []ERXVlanMapID, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 160) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXVlanMapID(i))
+	}
+	return
+}
+
+func ERXVlanMapID_Lookup(p *radius.Packet) (value ERXVlanMapID, err error) {
+	a, ok := _ERX_LookupVendor(p, 160)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXVlanMapID(i)
+	return
+}
+
+func ERXVlanMapID_Set(p *radius.Packet, value ERXVlanMapID) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 160, a)
+}
+
+func ERXVlanMapID_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 160)
+}
+
+func ERXIPv6DelegatedPoolName_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 161, a)
+}
+
+func ERXIPv6DelegatedPoolName_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 161, a)
+}
+
+func ERXIPv6DelegatedPoolName_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv6DelegatedPoolName_Lookup(p)
+	return
+}
+
+func ERXIPv6DelegatedPoolName_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv6DelegatedPoolName_LookupString(p)
+	return
+}
+
+func ERXIPv6DelegatedPoolName_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 161) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6DelegatedPoolName_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 161) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6DelegatedPoolName_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 161)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv6DelegatedPoolName_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 161)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv6DelegatedPoolName_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 161, a)
+}
+
+func ERXIPv6DelegatedPoolName_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 161, a)
+}
+
+func ERXIPv6DelegatedPoolName_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 161)
+}
+
+type ERXTxConnectSpeed uint32
+
+var ERXTxConnectSpeed_Strings = map[ERXTxConnectSpeed]string{}
+
+func (a ERXTxConnectSpeed) String() string {
+	if str, ok := ERXTxConnectSpeed_Strings[a]; ok {
+		return str
+	}
+	return "ERXTxConnectSpeed(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXTxConnectSpeed_Add(p *radius.Packet, value ERXTxConnectSpeed) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 162, a)
+}
+
+func ERXTxConnectSpeed_Get(p *radius.Packet) (value ERXTxConnectSpeed) {
+	value, _ = ERXTxConnectSpeed_Lookup(p)
+	return
+}
+
+func ERXTxConnectSpeed_Gets(p *radius.Packet) (values []ERXTxConnectSpeed, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 162) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXTxConnectSpeed(i))
+	}
+	return
+}
+
+func ERXTxConnectSpeed_Lookup(p *radius.Packet) (value ERXTxConnectSpeed, err error) {
+	a, ok := _ERX_LookupVendor(p, 162)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXTxConnectSpeed(i)
+	return
+}
+
+func ERXTxConnectSpeed_Set(p *radius.Packet, value ERXTxConnectSpeed) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 162, a)
+}
+
+func ERXTxConnectSpeed_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 162)
+}
+
+type ERXRxConnectSpeed uint32
+
+var ERXRxConnectSpeed_Strings = map[ERXRxConnectSpeed]string{}
+
+func (a ERXRxConnectSpeed) String() string {
+	if str, ok := ERXRxConnectSpeed_Strings[a]; ok {
+		return str
+	}
+	return "ERXRxConnectSpeed(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXRxConnectSpeed_Add(p *radius.Packet, value ERXRxConnectSpeed) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 163, a)
+}
+
+func ERXRxConnectSpeed_Get(p *radius.Packet) (value ERXRxConnectSpeed) {
+	value, _ = ERXRxConnectSpeed_Lookup(p)
+	return
+}
+
+func ERXRxConnectSpeed_Gets(p *radius.Packet) (values []ERXRxConnectSpeed, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 163) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXRxConnectSpeed(i))
+	}
+	return
+}
+
+func ERXRxConnectSpeed_Lookup(p *radius.Packet) (value ERXRxConnectSpeed, err error) {
+	a, ok := _ERX_LookupVendor(p, 163)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXRxConnectSpeed(i)
+	return
+}
+
+func ERXRxConnectSpeed_Set(p *radius.Packet, value ERXRxConnectSpeed) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 163, a)
+}
+
+func ERXRxConnectSpeed_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 163)
+}
+
+type ERXServiceActivateType uint32
+
+const (
+	ERXServiceActivateType_Value_Opscript ERXServiceActivateType = 1
+)
+
+var ERXServiceActivateType_Strings = map[ERXServiceActivateType]string{
+	ERXServiceActivateType_Value_Opscript: "opscript",
+}
+
+func (a ERXServiceActivateType) String() string {
+	if str, ok := ERXServiceActivateType_Strings[a]; ok {
+		return str
+	}
+	return "ERXServiceActivateType(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXServiceActivateType_Add(p *radius.Packet, value ERXServiceActivateType) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 173, a)
+}
+
+func ERXServiceActivateType_Get(p *radius.Packet) (value ERXServiceActivateType) {
+	value, _ = ERXServiceActivateType_Lookup(p)
+	return
+}
+
+func ERXServiceActivateType_Gets(p *radius.Packet) (values []ERXServiceActivateType, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 173) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXServiceActivateType(i))
+	}
+	return
+}
+
+func ERXServiceActivateType_Lookup(p *radius.Packet) (value ERXServiceActivateType, err error) {
+	a, ok := _ERX_LookupVendor(p, 173)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXServiceActivateType(i)
+	return
+}
+
+func ERXServiceActivateType_Set(p *radius.Packet, value ERXServiceActivateType) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 173, a)
+}
+
+func ERXServiceActivateType_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 173)
+}
+
+func ERXClientProfileName_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 174, a)
+}
+
+func ERXClientProfileName_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 174, a)
+}
+
+func ERXClientProfileName_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXClientProfileName_Lookup(p)
+	return
+}
+
+func ERXClientProfileName_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXClientProfileName_LookupString(p)
+	return
+}
+
+func ERXClientProfileName_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 174) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXClientProfileName_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 174) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXClientProfileName_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 174)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXClientProfileName_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 174)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXClientProfileName_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 174, a)
+}
+
+func ERXClientProfileName_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 174, a)
+}
+
+func ERXClientProfileName_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 174)
+}
+
+func ERXRedirectGWAddress_Add(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPAddr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 175, a)
+}
+
+func ERXRedirectGWAddress_Get(p *radius.Packet) (value net.IP) {
+	value, _ = ERXRedirectGWAddress_Lookup(p)
+	return
+}
+
+func ERXRedirectGWAddress_Gets(p *radius.Packet) (values []net.IP, err error) {
+	var i net.IP
+	for _, attr := range _ERX_GetsVendor(p, 175) {
+		i, err = radius.IPAddr(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXRedirectGWAddress_Lookup(p *radius.Packet) (value net.IP, err error) {
+	a, ok := _ERX_LookupVendor(p, 175)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value, err = radius.IPAddr(a)
+	return
+}
+
+func ERXRedirectGWAddress_Set(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPAddr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 175, a)
+}
+
+func ERXRedirectGWAddress_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 175)
+}
+
+func ERXAPNName_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 176, a)
+}
+
+func ERXAPNName_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 176, a)
+}
+
+func ERXAPNName_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXAPNName_Lookup(p)
+	return
+}
+
+func ERXAPNName_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXAPNName_LookupString(p)
+	return
+}
+
+func ERXAPNName_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 176) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAPNName_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 176) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAPNName_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 176)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXAPNName_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 176)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXAPNName_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 176, a)
+}
+
+func ERXAPNName_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 176, a)
+}
+
+func ERXAPNName_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 176)
+}
+
+func ERXCosShapingRate_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 177, a)
+}
+
+func ERXCosShapingRate_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 177, a)
+}
+
+func ERXCosShapingRate_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXCosShapingRate_Lookup(p)
+	return
+}
+
+func ERXCosShapingRate_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXCosShapingRate_LookupString(p)
+	return
+}
+
+func ERXCosShapingRate_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 177) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXCosShapingRate_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 177) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXCosShapingRate_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 177)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXCosShapingRate_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 177)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXCosShapingRate_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 177, a)
+}
+
+func ERXCosShapingRate_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 177, a)
+}
+
+func ERXCosShapingRate_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 177)
+}
+
+type ERXServiceVolumeGigawords uint32
+
+var ERXServiceVolumeGigawords_Strings = map[ERXServiceVolumeGigawords]string{}
+
+func (a ERXServiceVolumeGigawords) String() string {
+	if str, ok := ERXServiceVolumeGigawords_Strings[a]; ok {
+		return str
+	}
+	return "ERXServiceVolumeGigawords(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXServiceVolumeGigawords_Add(p *radius.Packet, value ERXServiceVolumeGigawords) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 179, a)
+}
+
+func ERXServiceVolumeGigawords_Get(p *radius.Packet) (value ERXServiceVolumeGigawords) {
+	value, _ = ERXServiceVolumeGigawords_Lookup(p)
+	return
+}
+
+func ERXServiceVolumeGigawords_Gets(p *radius.Packet) (values []ERXServiceVolumeGigawords, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 179) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXServiceVolumeGigawords(i))
+	}
+	return
+}
+
+func ERXServiceVolumeGigawords_Lookup(p *radius.Packet) (value ERXServiceVolumeGigawords, err error) {
+	a, ok := _ERX_LookupVendor(p, 179)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXServiceVolumeGigawords(i)
+	return
+}
+
+func ERXServiceVolumeGigawords_Set(p *radius.Packet, value ERXServiceVolumeGigawords) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 179, a)
+}
+
+func ERXServiceVolumeGigawords_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 179)
+}
+
+func ERXUpdateService_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 180, a)
+}
+
+func ERXUpdateService_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 180, a)
+}
+
+func ERXUpdateService_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXUpdateService_Lookup(p)
+	return
+}
+
+func ERXUpdateService_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXUpdateService_LookupString(p)
+	return
+}
+
+func ERXUpdateService_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 180) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXUpdateService_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 180) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXUpdateService_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 180)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXUpdateService_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 180)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXUpdateService_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 180, a)
+}
+
+func ERXUpdateService_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 180, a)
+}
+
+func ERXUpdateService_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 180)
+}
+
+func ERXDHCPv6GuidedRelayServer_Add(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPv6Addr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 181, a)
+}
+
+func ERXDHCPv6GuidedRelayServer_Get(p *radius.Packet) (value net.IP) {
+	value, _ = ERXDHCPv6GuidedRelayServer_Lookup(p)
+	return
+}
+
+func ERXDHCPv6GuidedRelayServer_Gets(p *radius.Packet) (values []net.IP, err error) {
+	var i net.IP
+	for _, attr := range _ERX_GetsVendor(p, 181) {
+		i, err = radius.IPv6Addr(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPv6GuidedRelayServer_Lookup(p *radius.Packet) (value net.IP, err error) {
+	a, ok := _ERX_LookupVendor(p, 181)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value, err = radius.IPv6Addr(a)
+	return
+}
+
+func ERXDHCPv6GuidedRelayServer_Set(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPv6Addr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 181, a)
+}
+
+func ERXDHCPv6GuidedRelayServer_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 181)
+}
+
+func ERXAccLoopRemoteID_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 182, a)
+}
+
+func ERXAccLoopRemoteID_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 182, a)
+}
+
+func ERXAccLoopRemoteID_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXAccLoopRemoteID_Lookup(p)
+	return
+}
+
+func ERXAccLoopRemoteID_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXAccLoopRemoteID_LookupString(p)
+	return
+}
+
+func ERXAccLoopRemoteID_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 182) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccLoopRemoteID_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 182) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccLoopRemoteID_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 182)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXAccLoopRemoteID_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 182)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXAccLoopRemoteID_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 182, a)
+}
+
+func ERXAccLoopRemoteID_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 182, a)
+}
+
+func ERXAccLoopRemoteID_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 182)
+}
+
+func ERXAccLoopEncap_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 183, a)
+}
+
+func ERXAccLoopEncap_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 183, a)
+}
+
+func ERXAccLoopEncap_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXAccLoopEncap_Lookup(p)
+	return
+}
+
+func ERXAccLoopEncap_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXAccLoopEncap_LookupString(p)
+	return
+}
+
+func ERXAccLoopEncap_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 183) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccLoopEncap_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 183) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAccLoopEncap_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 183)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXAccLoopEncap_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 183)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXAccLoopEncap_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 183, a)
+}
+
+func ERXAccLoopEncap_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 183, a)
+}
+
+func ERXAccLoopEncap_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 183)
+}
+
+type ERXInnerVlanMapID uint32
+
+var ERXInnerVlanMapID_Strings = map[ERXInnerVlanMapID]string{}
+
+func (a ERXInnerVlanMapID) String() string {
+	if str, ok := ERXInnerVlanMapID_Strings[a]; ok {
+		return str
+	}
+	return "ERXInnerVlanMapID(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXInnerVlanMapID_Add(p *radius.Packet, value ERXInnerVlanMapID) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 184, a)
+}
+
+func ERXInnerVlanMapID_Get(p *radius.Packet) (value ERXInnerVlanMapID) {
+	value, _ = ERXInnerVlanMapID_Lookup(p)
+	return
+}
+
+func ERXInnerVlanMapID_Gets(p *radius.Packet) (values []ERXInnerVlanMapID, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 184) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXInnerVlanMapID(i))
+	}
+	return
+}
+
+func ERXInnerVlanMapID_Lookup(p *radius.Packet) (value ERXInnerVlanMapID, err error) {
+	a, ok := _ERX_LookupVendor(p, 184)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXInnerVlanMapID(i)
+	return
+}
+
+func ERXInnerVlanMapID_Set(p *radius.Packet, value ERXInnerVlanMapID) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 184, a)
+}
+
+func ERXInnerVlanMapID_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 184)
+}
+
+func ERXCoreFacingInterface_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 185, a)
+}
+
+func ERXCoreFacingInterface_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 185, a)
+}
+
+func ERXCoreFacingInterface_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXCoreFacingInterface_Lookup(p)
+	return
+}
+
+func ERXCoreFacingInterface_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXCoreFacingInterface_LookupString(p)
+	return
+}
+
+func ERXCoreFacingInterface_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 185) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXCoreFacingInterface_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 185) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXCoreFacingInterface_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 185)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXCoreFacingInterface_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 185)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXCoreFacingInterface_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 185, a)
+}
+
+func ERXCoreFacingInterface_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 185, a)
+}
+
+func ERXCoreFacingInterface_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 185)
+}
+
+func ERXDHCPFirstRelayIPv4Address_Add(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPAddr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 189, a)
+}
+
+func ERXDHCPFirstRelayIPv4Address_Get(p *radius.Packet) (value net.IP) {
+	value, _ = ERXDHCPFirstRelayIPv4Address_Lookup(p)
+	return
+}
+
+func ERXDHCPFirstRelayIPv4Address_Gets(p *radius.Packet) (values []net.IP, err error) {
+	var i net.IP
+	for _, attr := range _ERX_GetsVendor(p, 189) {
+		i, err = radius.IPAddr(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPFirstRelayIPv4Address_Lookup(p *radius.Packet) (value net.IP, err error) {
+	a, ok := _ERX_LookupVendor(p, 189)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value, err = radius.IPAddr(a)
+	return
+}
+
+func ERXDHCPFirstRelayIPv4Address_Set(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPAddr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 189, a)
+}
+
+func ERXDHCPFirstRelayIPv4Address_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 189)
+}
+
+func ERXDHCPFirstRelayIPv6Address_Add(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPv6Addr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 190, a)
+}
+
+func ERXDHCPFirstRelayIPv6Address_Get(p *radius.Packet) (value net.IP) {
+	value, _ = ERXDHCPFirstRelayIPv6Address_Lookup(p)
+	return
+}
+
+func ERXDHCPFirstRelayIPv6Address_Gets(p *radius.Packet) (values []net.IP, err error) {
+	var i net.IP
+	for _, attr := range _ERX_GetsVendor(p, 190) {
+		i, err = radius.IPv6Addr(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPFirstRelayIPv6Address_Lookup(p *radius.Packet) (value net.IP, err error) {
+	a, ok := _ERX_LookupVendor(p, 190)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value, err = radius.IPv6Addr(a)
+	return
+}
+
+func ERXDHCPFirstRelayIPv6Address_Set(p *radius.Packet, value net.IP) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewIPv6Addr(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 190, a)
+}
+
+func ERXDHCPFirstRelayIPv6Address_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 190)
+}
+
+func ERXInputInterfaceFilter_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 191, a)
+}
+
+func ERXInputInterfaceFilter_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 191, a)
+}
+
+func ERXInputInterfaceFilter_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXInputInterfaceFilter_Lookup(p)
+	return
+}
+
+func ERXInputInterfaceFilter_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXInputInterfaceFilter_LookupString(p)
+	return
+}
+
+func ERXInputInterfaceFilter_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 191) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXInputInterfaceFilter_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 191) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXInputInterfaceFilter_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 191)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXInputInterfaceFilter_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 191)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXInputInterfaceFilter_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 191, a)
+}
+
+func ERXInputInterfaceFilter_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 191, a)
+}
+
+func ERXInputInterfaceFilter_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 191)
+}
+
+func ERXOutputInterfaceFilter_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 192, a)
+}
+
+func ERXOutputInterfaceFilter_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 192, a)
+}
+
+func ERXOutputInterfaceFilter_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXOutputInterfaceFilter_Lookup(p)
+	return
+}
+
+func ERXOutputInterfaceFilter_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXOutputInterfaceFilter_LookupString(p)
+	return
+}
+
+func ERXOutputInterfaceFilter_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 192) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXOutputInterfaceFilter_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 192) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXOutputInterfaceFilter_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 192)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXOutputInterfaceFilter_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 192)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXOutputInterfaceFilter_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 192, a)
+}
+
+func ERXOutputInterfaceFilter_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 192, a)
+}
+
+func ERXOutputInterfaceFilter_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 192)
+}
+
+type ERXPimEnable uint32
+
+const (
+	ERXPimEnable_Value_Disabled ERXPimEnable = 0
+	ERXPimEnable_Value_Enabled  ERXPimEnable = 1
+)
+
+var ERXPimEnable_Strings = map[ERXPimEnable]string{
+	ERXPimEnable_Value_Disabled: "disabled",
+	ERXPimEnable_Value_Enabled:  "enabled",
+}
+
+func (a ERXPimEnable) String() string {
+	if str, ok := ERXPimEnable_Strings[a]; ok {
+		return str
+	}
+	return "ERXPimEnable(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXPimEnable_Add(p *radius.Packet, value ERXPimEnable) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 193, a)
+}
+
+func ERXPimEnable_Get(p *radius.Packet) (value ERXPimEnable) {
+	value, _ = ERXPimEnable_Lookup(p)
+	return
+}
+
+func ERXPimEnable_Gets(p *radius.Packet) (values []ERXPimEnable, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 193) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXPimEnable(i))
+	}
+	return
+}
+
+func ERXPimEnable_Lookup(p *radius.Packet) (value ERXPimEnable, err error) {
+	a, ok := _ERX_LookupVendor(p, 193)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXPimEnable(i)
+	return
+}
+
+func ERXPimEnable_Set(p *radius.Packet, value ERXPimEnable) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 193, a)
+}
+
+func ERXPimEnable_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 193)
+}
+
+type ERXBulkCoATransactionID uint32
+
+var ERXBulkCoATransactionID_Strings = map[ERXBulkCoATransactionID]string{}
+
+func (a ERXBulkCoATransactionID) String() string {
+	if str, ok := ERXBulkCoATransactionID_Strings[a]; ok {
+		return str
+	}
+	return "ERXBulkCoATransactionID(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXBulkCoATransactionID_Add(p *radius.Packet, value ERXBulkCoATransactionID) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 194, a)
+}
+
+func ERXBulkCoATransactionID_Get(p *radius.Packet) (value ERXBulkCoATransactionID) {
+	value, _ = ERXBulkCoATransactionID_Lookup(p)
+	return
+}
+
+func ERXBulkCoATransactionID_Gets(p *radius.Packet) (values []ERXBulkCoATransactionID, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 194) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXBulkCoATransactionID(i))
+	}
+	return
+}
+
+func ERXBulkCoATransactionID_Lookup(p *radius.Packet) (value ERXBulkCoATransactionID, err error) {
+	a, ok := _ERX_LookupVendor(p, 194)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXBulkCoATransactionID(i)
+	return
+}
+
+func ERXBulkCoATransactionID_Set(p *radius.Packet, value ERXBulkCoATransactionID) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 194, a)
+}
+
+func ERXBulkCoATransactionID_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 194)
+}
+
+type ERXBulkCoAIdentifier uint32
+
+var ERXBulkCoAIdentifier_Strings = map[ERXBulkCoAIdentifier]string{}
+
+func (a ERXBulkCoAIdentifier) String() string {
+	if str, ok := ERXBulkCoAIdentifier_Strings[a]; ok {
+		return str
+	}
+	return "ERXBulkCoAIdentifier(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXBulkCoAIdentifier_Add(p *radius.Packet, value ERXBulkCoAIdentifier) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 195, a)
+}
+
+func ERXBulkCoAIdentifier_Get(p *radius.Packet) (value ERXBulkCoAIdentifier) {
+	value, _ = ERXBulkCoAIdentifier_Lookup(p)
+	return
+}
+
+func ERXBulkCoAIdentifier_Gets(p *radius.Packet) (values []ERXBulkCoAIdentifier, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 195) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXBulkCoAIdentifier(i))
+	}
+	return
+}
+
+func ERXBulkCoAIdentifier_Lookup(p *radius.Packet) (value ERXBulkCoAIdentifier, err error) {
+	a, ok := _ERX_LookupVendor(p, 195)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXBulkCoAIdentifier(i)
+	return
+}
+
+func ERXBulkCoAIdentifier_Set(p *radius.Packet, value ERXBulkCoAIdentifier) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 195, a)
+}
+
+func ERXBulkCoAIdentifier_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 195)
+}
+
+func ERXIPv4InputServiceSet_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 196, a)
+}
+
+func ERXIPv4InputServiceSet_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 196, a)
+}
+
+func ERXIPv4InputServiceSet_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv4InputServiceSet_Lookup(p)
+	return
+}
+
+func ERXIPv4InputServiceSet_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv4InputServiceSet_LookupString(p)
+	return
+}
+
+func ERXIPv4InputServiceSet_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 196) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv4InputServiceSet_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 196) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv4InputServiceSet_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 196)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv4InputServiceSet_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 196)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv4InputServiceSet_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 196, a)
+}
+
+func ERXIPv4InputServiceSet_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 196, a)
+}
+
+func ERXIPv4InputServiceSet_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 196)
+}
+
+func ERXIPv4OutputServiceSet_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 197, a)
+}
+
+func ERXIPv4OutputServiceSet_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 197, a)
+}
+
+func ERXIPv4OutputServiceSet_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv4OutputServiceSet_Lookup(p)
+	return
+}
+
+func ERXIPv4OutputServiceSet_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv4OutputServiceSet_LookupString(p)
+	return
+}
+
+func ERXIPv4OutputServiceSet_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 197) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv4OutputServiceSet_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 197) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv4OutputServiceSet_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 197)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv4OutputServiceSet_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 197)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv4OutputServiceSet_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 197, a)
+}
+
+func ERXIPv4OutputServiceSet_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 197, a)
+}
+
+func ERXIPv4OutputServiceSet_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 197)
+}
+
+func ERXIPv4InputServiceFilter_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 198, a)
+}
+
+func ERXIPv4InputServiceFilter_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 198, a)
+}
+
+func ERXIPv4InputServiceFilter_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv4InputServiceFilter_Lookup(p)
+	return
+}
+
+func ERXIPv4InputServiceFilter_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv4InputServiceFilter_LookupString(p)
+	return
+}
+
+func ERXIPv4InputServiceFilter_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 198) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv4InputServiceFilter_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 198) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv4InputServiceFilter_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 198)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv4InputServiceFilter_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 198)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv4InputServiceFilter_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 198, a)
+}
+
+func ERXIPv4InputServiceFilter_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 198, a)
+}
+
+func ERXIPv4InputServiceFilter_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 198)
+}
+
+func ERXIPv4OutputServiceFilter_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 199, a)
+}
+
+func ERXIPv4OutputServiceFilter_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 199, a)
+}
+
+func ERXIPv4OutputServiceFilter_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv4OutputServiceFilter_Lookup(p)
+	return
+}
+
+func ERXIPv4OutputServiceFilter_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv4OutputServiceFilter_LookupString(p)
+	return
+}
+
+func ERXIPv4OutputServiceFilter_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 199) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv4OutputServiceFilter_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 199) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv4OutputServiceFilter_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 199)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv4OutputServiceFilter_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 199)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv4OutputServiceFilter_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 199, a)
+}
+
+func ERXIPv4OutputServiceFilter_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 199, a)
+}
+
+func ERXIPv4OutputServiceFilter_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 199)
+}
+
+func ERXIPv6InputServiceSet_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 200, a)
+}
+
+func ERXIPv6InputServiceSet_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 200, a)
+}
+
+func ERXIPv6InputServiceSet_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv6InputServiceSet_Lookup(p)
+	return
+}
+
+func ERXIPv6InputServiceSet_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv6InputServiceSet_LookupString(p)
+	return
+}
+
+func ERXIPv6InputServiceSet_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 200) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6InputServiceSet_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 200) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6InputServiceSet_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 200)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv6InputServiceSet_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 200)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv6InputServiceSet_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 200, a)
+}
+
+func ERXIPv6InputServiceSet_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 200, a)
+}
+
+func ERXIPv6InputServiceSet_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 200)
+}
+
+func ERXIPv6OutputServiceSet_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 201, a)
+}
+
+func ERXIPv6OutputServiceSet_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 201, a)
+}
+
+func ERXIPv6OutputServiceSet_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv6OutputServiceSet_Lookup(p)
+	return
+}
+
+func ERXIPv6OutputServiceSet_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv6OutputServiceSet_LookupString(p)
+	return
+}
+
+func ERXIPv6OutputServiceSet_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 201) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6OutputServiceSet_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 201) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6OutputServiceSet_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 201)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv6OutputServiceSet_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 201)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv6OutputServiceSet_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 201, a)
+}
+
+func ERXIPv6OutputServiceSet_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 201, a)
+}
+
+func ERXIPv6OutputServiceSet_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 201)
+}
+
+func ERXIPv6InputServiceFilter_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 202, a)
+}
+
+func ERXIPv6InputServiceFilter_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 202, a)
+}
+
+func ERXIPv6InputServiceFilter_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv6InputServiceFilter_Lookup(p)
+	return
+}
+
+func ERXIPv6InputServiceFilter_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv6InputServiceFilter_LookupString(p)
+	return
+}
+
+func ERXIPv6InputServiceFilter_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 202) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6InputServiceFilter_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 202) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6InputServiceFilter_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 202)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv6InputServiceFilter_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 202)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv6InputServiceFilter_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 202, a)
+}
+
+func ERXIPv6InputServiceFilter_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 202, a)
+}
+
+func ERXIPv6InputServiceFilter_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 202)
+}
+
+func ERXIPv6OutputServiceFilter_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 203, a)
+}
+
+func ERXIPv6OutputServiceFilter_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 203, a)
+}
+
+func ERXIPv6OutputServiceFilter_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXIPv6OutputServiceFilter_Lookup(p)
+	return
+}
+
+func ERXIPv6OutputServiceFilter_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXIPv6OutputServiceFilter_LookupString(p)
+	return
+}
+
+func ERXIPv6OutputServiceFilter_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 203) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6OutputServiceFilter_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 203) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXIPv6OutputServiceFilter_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 203)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXIPv6OutputServiceFilter_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 203)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXIPv6OutputServiceFilter_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 203, a)
+}
+
+func ERXIPv6OutputServiceFilter_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 203, a)
+}
+
+func ERXIPv6OutputServiceFilter_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 203)
+}
+
+func ERXAdvPcefProfileName_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 204, a)
+}
+
+func ERXAdvPcefProfileName_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 204, a)
+}
+
+func ERXAdvPcefProfileName_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXAdvPcefProfileName_Lookup(p)
+	return
+}
+
+func ERXAdvPcefProfileName_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXAdvPcefProfileName_LookupString(p)
+	return
+}
+
+func ERXAdvPcefProfileName_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 204) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAdvPcefProfileName_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 204) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAdvPcefProfileName_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 204)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXAdvPcefProfileName_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 204)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXAdvPcefProfileName_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 204, a)
+}
+
+func ERXAdvPcefProfileName_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 204, a)
+}
+
+func ERXAdvPcefProfileName_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 204)
+}
+
+func ERXAdvPcefRuleName_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 205, a)
+}
+
+func ERXAdvPcefRuleName_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 205, a)
+}
+
+func ERXAdvPcefRuleName_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXAdvPcefRuleName_Lookup(p)
+	return
+}
+
+func ERXAdvPcefRuleName_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXAdvPcefRuleName_LookupString(p)
+	return
+}
+
+func ERXAdvPcefRuleName_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 205) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAdvPcefRuleName_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 205) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXAdvPcefRuleName_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 205)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXAdvPcefRuleName_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 205)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXAdvPcefRuleName_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 205, a)
+}
+
+func ERXAdvPcefRuleName_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 205, a)
+}
+
+func ERXAdvPcefRuleName_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 205)
+}
+
+type ERXReAuthenticationCatalyst uint32
+
+const (
+	ERXReAuthenticationCatalyst_Value_Disabled    ERXReAuthenticationCatalyst = 0
+	ERXReAuthenticationCatalyst_Value_ClientRenew ERXReAuthenticationCatalyst = 1
+)
+
+var ERXReAuthenticationCatalyst_Strings = map[ERXReAuthenticationCatalyst]string{
+	ERXReAuthenticationCatalyst_Value_Disabled:    "disabled",
+	ERXReAuthenticationCatalyst_Value_ClientRenew: "client-renew",
+}
+
+func (a ERXReAuthenticationCatalyst) String() string {
+	if str, ok := ERXReAuthenticationCatalyst_Strings[a]; ok {
+		return str
+	}
+	return "ERXReAuthenticationCatalyst(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXReAuthenticationCatalyst_Add(p *radius.Packet, value ERXReAuthenticationCatalyst) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 206, a)
+}
+
+func ERXReAuthenticationCatalyst_Get(p *radius.Packet) (value ERXReAuthenticationCatalyst) {
+	value, _ = ERXReAuthenticationCatalyst_Lookup(p)
+	return
+}
+
+func ERXReAuthenticationCatalyst_Gets(p *radius.Packet) (values []ERXReAuthenticationCatalyst, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 206) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXReAuthenticationCatalyst(i))
+	}
+	return
+}
+
+func ERXReAuthenticationCatalyst_Lookup(p *radius.Packet) (value ERXReAuthenticationCatalyst, err error) {
+	a, ok := _ERX_LookupVendor(p, 206)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXReAuthenticationCatalyst(i)
+	return
+}
+
+func ERXReAuthenticationCatalyst_Set(p *radius.Packet, value ERXReAuthenticationCatalyst) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 206, a)
+}
+
+func ERXReAuthenticationCatalyst_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 206)
+}
+
+func ERXDHCPv6Options_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 207, a)
+}
+
+func ERXDHCPv6Options_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 207, a)
+}
+
+func ERXDHCPv6Options_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXDHCPv6Options_Lookup(p)
+	return
+}
+
+func ERXDHCPv6Options_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXDHCPv6Options_LookupString(p)
+	return
+}
+
+func ERXDHCPv6Options_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 207) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPv6Options_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 207) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPv6Options_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 207)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXDHCPv6Options_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 207)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXDHCPv6Options_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 207, a)
+}
+
+func ERXDHCPv6Options_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 207, a)
+}
+
+func ERXDHCPv6Options_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 207)
+}
+
+func ERXDHCPHeader_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 208, a)
+}
+
+func ERXDHCPHeader_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 208, a)
+}
+
+func ERXDHCPHeader_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXDHCPHeader_Lookup(p)
+	return
+}
+
+func ERXDHCPHeader_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXDHCPHeader_LookupString(p)
+	return
+}
+
+func ERXDHCPHeader_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 208) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPHeader_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 208) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPHeader_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 208)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXDHCPHeader_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 208)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXDHCPHeader_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 208, a)
+}
+
+func ERXDHCPHeader_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 208, a)
+}
+
+func ERXDHCPHeader_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 208)
+}
+
+func ERXDHCPv6Header_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 209, a)
+}
+
+func ERXDHCPv6Header_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 209, a)
+}
+
+func ERXDHCPv6Header_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXDHCPv6Header_Lookup(p)
+	return
+}
+
+func ERXDHCPv6Header_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXDHCPv6Header_LookupString(p)
+	return
+}
+
+func ERXDHCPv6Header_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 209) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPv6Header_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 209) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXDHCPv6Header_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 209)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXDHCPv6Header_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 209)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXDHCPv6Header_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 209, a)
+}
+
+func ERXDHCPv6Header_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 209, a)
+}
+
+func ERXDHCPv6Header_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 209)
+}
+
+type ERXAcctRequestReason uint32
+
+const (
+	ERXAcctRequestReason_Value_AcctStartAck            ERXAcctRequestReason = 1
+	ERXAcctRequestReason_Value_Periodic                ERXAcctRequestReason = 2
+	ERXAcctRequestReason_Value_IPActive                ERXAcctRequestReason = 4
+	ERXAcctRequestReason_Value_IPInactive              ERXAcctRequestReason = 8
+	ERXAcctRequestReason_Value_IPv6Active              ERXAcctRequestReason = 16
+	ERXAcctRequestReason_Value_IPv6Inactive            ERXAcctRequestReason = 32
+	ERXAcctRequestReason_Value_SessionActive           ERXAcctRequestReason = 64
+	ERXAcctRequestReason_Value_SessionInactive         ERXAcctRequestReason = 128
+	ERXAcctRequestReason_Value_LineSpeedChange         ERXAcctRequestReason = 256
+	ERXAcctRequestReason_Value_AddressAssignmentChange ERXAcctRequestReason = 512
+	ERXAcctRequestReason_Value_CoAComplete             ERXAcctRequestReason = 1024
+)
+
+var ERXAcctRequestReason_Strings = map[ERXAcctRequestReason]string{
+	ERXAcctRequestReason_Value_AcctStartAck:            "Acct-Start-Ack",
+	ERXAcctRequestReason_Value_Periodic:                "Periodic",
+	ERXAcctRequestReason_Value_IPActive:                "IP-Active",
+	ERXAcctRequestReason_Value_IPInactive:              "IP-Inactive",
+	ERXAcctRequestReason_Value_IPv6Active:              "IPv6-Active",
+	ERXAcctRequestReason_Value_IPv6Inactive:            "IPv6-Inactive",
+	ERXAcctRequestReason_Value_SessionActive:           "Session-Active",
+	ERXAcctRequestReason_Value_SessionInactive:         "Session-Inactive",
+	ERXAcctRequestReason_Value_LineSpeedChange:         "Line-Speed-Change",
+	ERXAcctRequestReason_Value_AddressAssignmentChange: "Address-Assignment-Change",
+	ERXAcctRequestReason_Value_CoAComplete:             "CoA-Complete",
+}
+
+func (a ERXAcctRequestReason) String() string {
+	if str, ok := ERXAcctRequestReason_Strings[a]; ok {
+		return str
+	}
+	return "ERXAcctRequestReason(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXAcctRequestReason_Add(p *radius.Packet, value ERXAcctRequestReason) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 210, a)
+}
+
+func ERXAcctRequestReason_Get(p *radius.Packet) (value ERXAcctRequestReason) {
+	value, _ = ERXAcctRequestReason_Lookup(p)
+	return
+}
+
+func ERXAcctRequestReason_Gets(p *radius.Packet) (values []ERXAcctRequestReason, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 210) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXAcctRequestReason(i))
+	}
+	return
+}
+
+func ERXAcctRequestReason_Lookup(p *radius.Packet) (value ERXAcctRequestReason, err error) {
+	a, ok := _ERX_LookupVendor(p, 210)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXAcctRequestReason(i)
+	return
+}
+
+func ERXAcctRequestReason_Set(p *radius.Packet, value ERXAcctRequestReason) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 210, a)
+}
+
+func ERXAcctRequestReason_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 210)
+}
+
+func ERXInnerTagProtocolID_Add(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 211, a)
+}
+
+func ERXInnerTagProtocolID_AddString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_AddVendor(p, 211, a)
+}
+
+func ERXInnerTagProtocolID_Get(p *radius.Packet) (value []byte) {
+	value, _ = ERXInnerTagProtocolID_Lookup(p)
+	return
+}
+
+func ERXInnerTagProtocolID_GetString(p *radius.Packet) (value string) {
+	value, _ = ERXInnerTagProtocolID_LookupString(p)
+	return
+}
+
+func ERXInnerTagProtocolID_Gets(p *radius.Packet) (values [][]byte, err error) {
+	var i []byte
+	for _, attr := range _ERX_GetsVendor(p, 211) {
+		i = radius.Bytes(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXInnerTagProtocolID_GetStrings(p *radius.Packet) (values []string, err error) {
+	var i string
+	for _, attr := range _ERX_GetsVendor(p, 211) {
+		i = radius.String(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, i)
+	}
+	return
+}
+
+func ERXInnerTagProtocolID_Lookup(p *radius.Packet) (value []byte, err error) {
+	a, ok := _ERX_LookupVendor(p, 211)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.Bytes(a)
+	return
+}
+
+func ERXInnerTagProtocolID_LookupString(p *radius.Packet) (value string, err error) {
+	a, ok := _ERX_LookupVendor(p, 211)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	value = radius.String(a)
+	return
+}
+
+func ERXInnerTagProtocolID_Set(p *radius.Packet, value []byte) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewBytes(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 211, a)
+}
+
+func ERXInnerTagProtocolID_SetString(p *radius.Packet, value string) (err error) {
+	var a radius.Attribute
+	a, err = radius.NewString(value)
+	if err != nil {
+		return
+	}
+	return _ERX_SetVendor(p, 211, a)
+}
+
+func ERXInnerTagProtocolID_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 211)
+}
+
+type ERXRoutingServices uint32
+
+const (
+	ERXRoutingServices_Value_Disabled ERXRoutingServices = 0
+	ERXRoutingServices_Value_Enabled  ERXRoutingServices = 1
+)
+
+var ERXRoutingServices_Strings = map[ERXRoutingServices]string{
+	ERXRoutingServices_Value_Disabled: "disabled",
+	ERXRoutingServices_Value_Enabled:  "enabled",
+}
+
+func (a ERXRoutingServices) String() string {
+	if str, ok := ERXRoutingServices_Strings[a]; ok {
+		return str
+	}
+	return "ERXRoutingServices(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXRoutingServices_Add(p *radius.Packet, value ERXRoutingServices) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 212, a)
+}
+
+func ERXRoutingServices_Get(p *radius.Packet) (value ERXRoutingServices) {
+	value, _ = ERXRoutingServices_Lookup(p)
+	return
+}
+
+func ERXRoutingServices_Gets(p *radius.Packet) (values []ERXRoutingServices, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 212) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXRoutingServices(i))
+	}
+	return
+}
+
+func ERXRoutingServices_Lookup(p *radius.Packet) (value ERXRoutingServices, err error) {
+	a, ok := _ERX_LookupVendor(p, 212)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXRoutingServices(i)
+	return
+}
+
+func ERXRoutingServices_Set(p *radius.Packet, value ERXRoutingServices) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 212, a)
+}
+
+func ERXRoutingServices_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 212)
+}
+
+type ERXInterfaceSetTargetingWeight uint32
+
+var ERXInterfaceSetTargetingWeight_Strings = map[ERXInterfaceSetTargetingWeight]string{}
+
+func (a ERXInterfaceSetTargetingWeight) String() string {
+	if str, ok := ERXInterfaceSetTargetingWeight_Strings[a]; ok {
+		return str
+	}
+	return "ERXInterfaceSetTargetingWeight(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXInterfaceSetTargetingWeight_Add(p *radius.Packet, value ERXInterfaceSetTargetingWeight) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 213, a)
+}
+
+func ERXInterfaceSetTargetingWeight_Get(p *radius.Packet) (value ERXInterfaceSetTargetingWeight) {
+	value, _ = ERXInterfaceSetTargetingWeight_Lookup(p)
+	return
+}
+
+func ERXInterfaceSetTargetingWeight_Gets(p *radius.Packet) (values []ERXInterfaceSetTargetingWeight, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 213) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXInterfaceSetTargetingWeight(i))
+	}
+	return
+}
+
+func ERXInterfaceSetTargetingWeight_Lookup(p *radius.Packet) (value ERXInterfaceSetTargetingWeight, err error) {
+	a, ok := _ERX_LookupVendor(p, 213)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXInterfaceSetTargetingWeight(i)
+	return
+}
+
+func ERXInterfaceSetTargetingWeight_Set(p *radius.Packet, value ERXInterfaceSetTargetingWeight) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 213, a)
+}
+
+func ERXInterfaceSetTargetingWeight_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 213)
+}
+
+type ERXInterfaceTargetingWeight uint32
+
+var ERXInterfaceTargetingWeight_Strings = map[ERXInterfaceTargetingWeight]string{}
+
+func (a ERXInterfaceTargetingWeight) String() string {
+	if str, ok := ERXInterfaceTargetingWeight_Strings[a]; ok {
+		return str
+	}
+	return "ERXInterfaceTargetingWeight(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXInterfaceTargetingWeight_Add(p *radius.Packet, value ERXInterfaceTargetingWeight) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 214, a)
+}
+
+func ERXInterfaceTargetingWeight_Get(p *radius.Packet) (value ERXInterfaceTargetingWeight) {
+	value, _ = ERXInterfaceTargetingWeight_Lookup(p)
+	return
+}
+
+func ERXInterfaceTargetingWeight_Gets(p *radius.Packet) (values []ERXInterfaceTargetingWeight, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 214) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXInterfaceTargetingWeight(i))
+	}
+	return
+}
+
+func ERXInterfaceTargetingWeight_Lookup(p *radius.Packet) (value ERXInterfaceTargetingWeight, err error) {
+	a, ok := _ERX_LookupVendor(p, 214)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXInterfaceTargetingWeight(i)
+	return
+}
+
+func ERXInterfaceTargetingWeight_Set(p *radius.Packet, value ERXInterfaceTargetingWeight) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 214, a)
+}
+
+func ERXInterfaceTargetingWeight_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 214)
+}
+
+type ERXHybridAccessDSLDownstreamSpeed uint32
+
+var ERXHybridAccessDSLDownstreamSpeed_Strings = map[ERXHybridAccessDSLDownstreamSpeed]string{}
+
+func (a ERXHybridAccessDSLDownstreamSpeed) String() string {
+	if str, ok := ERXHybridAccessDSLDownstreamSpeed_Strings[a]; ok {
+		return str
+	}
+	return "ERXHybridAccessDSLDownstreamSpeed(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXHybridAccessDSLDownstreamSpeed_Add(p *radius.Packet, value ERXHybridAccessDSLDownstreamSpeed) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 216, a)
+}
+
+func ERXHybridAccessDSLDownstreamSpeed_Get(p *radius.Packet) (value ERXHybridAccessDSLDownstreamSpeed) {
+	value, _ = ERXHybridAccessDSLDownstreamSpeed_Lookup(p)
+	return
+}
+
+func ERXHybridAccessDSLDownstreamSpeed_Gets(p *radius.Packet) (values []ERXHybridAccessDSLDownstreamSpeed, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 216) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXHybridAccessDSLDownstreamSpeed(i))
+	}
+	return
+}
+
+func ERXHybridAccessDSLDownstreamSpeed_Lookup(p *radius.Packet) (value ERXHybridAccessDSLDownstreamSpeed, err error) {
+	a, ok := _ERX_LookupVendor(p, 216)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXHybridAccessDSLDownstreamSpeed(i)
+	return
+}
+
+func ERXHybridAccessDSLDownstreamSpeed_Set(p *radius.Packet, value ERXHybridAccessDSLDownstreamSpeed) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 216, a)
+}
+
+func ERXHybridAccessDSLDownstreamSpeed_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 216)
+}
+
+type ERXHybridAccessLTEDownstreamSpeed uint32
+
+var ERXHybridAccessLTEDownstreamSpeed_Strings = map[ERXHybridAccessLTEDownstreamSpeed]string{}
+
+func (a ERXHybridAccessLTEDownstreamSpeed) String() string {
+	if str, ok := ERXHybridAccessLTEDownstreamSpeed_Strings[a]; ok {
+		return str
+	}
+	return "ERXHybridAccessLTEDownstreamSpeed(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXHybridAccessLTEDownstreamSpeed_Add(p *radius.Packet, value ERXHybridAccessLTEDownstreamSpeed) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 217, a)
+}
+
+func ERXHybridAccessLTEDownstreamSpeed_Get(p *radius.Packet) (value ERXHybridAccessLTEDownstreamSpeed) {
+	value, _ = ERXHybridAccessLTEDownstreamSpeed_Lookup(p)
+	return
+}
+
+func ERXHybridAccessLTEDownstreamSpeed_Gets(p *radius.Packet) (values []ERXHybridAccessLTEDownstreamSpeed, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 217) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXHybridAccessLTEDownstreamSpeed(i))
+	}
+	return
+}
+
+func ERXHybridAccessLTEDownstreamSpeed_Lookup(p *radius.Packet) (value ERXHybridAccessLTEDownstreamSpeed, err error) {
+	a, ok := _ERX_LookupVendor(p, 217)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXHybridAccessLTEDownstreamSpeed(i)
+	return
+}
+
+func ERXHybridAccessLTEDownstreamSpeed_Set(p *radius.Packet, value ERXHybridAccessLTEDownstreamSpeed) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 217, a)
+}
+
+func ERXHybridAccessLTEDownstreamSpeed_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 217)
+}
+
+type ERXPONAccessType uint32
+
+const (
+	ERXPONAccessType_Value_Other   ERXPONAccessType = 0
+	ERXPONAccessType_Value_GPON    ERXPONAccessType = 1
+	ERXPONAccessType_Value_XGPON1  ERXPONAccessType = 2
+	ERXPONAccessType_Value_TWDMPON ERXPONAccessType = 3
+	ERXPONAccessType_Value_XGSPON  ERXPONAccessType = 4
+	ERXPONAccessType_Value_WDMPON  ERXPONAccessType = 5
+	ERXPONAccessType_Value_UNKNOWN ERXPONAccessType = 7
+)
+
+var ERXPONAccessType_Strings = map[ERXPONAccessType]string{
+	ERXPONAccessType_Value_Other:   "Other",
+	ERXPONAccessType_Value_GPON:    "GPON",
+	ERXPONAccessType_Value_XGPON1:  "XG-PON1",
+	ERXPONAccessType_Value_TWDMPON: "TWDM-PON",
+	ERXPONAccessType_Value_XGSPON:  "XGS-PON",
+	ERXPONAccessType_Value_WDMPON:  "WDM-PON",
+	ERXPONAccessType_Value_UNKNOWN: "UNKNOWN",
+}
+
+func (a ERXPONAccessType) String() string {
+	if str, ok := ERXPONAccessType_Strings[a]; ok {
+		return str
+	}
+	return "ERXPONAccessType(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXPONAccessType_Add(p *radius.Packet, value ERXPONAccessType) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 219, a)
+}
+
+func ERXPONAccessType_Get(p *radius.Packet) (value ERXPONAccessType) {
+	value, _ = ERXPONAccessType_Lookup(p)
+	return
+}
+
+func ERXPONAccessType_Gets(p *radius.Packet) (values []ERXPONAccessType, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 219) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXPONAccessType(i))
+	}
+	return
+}
+
+func ERXPONAccessType_Lookup(p *radius.Packet) (value ERXPONAccessType, err error) {
+	a, ok := _ERX_LookupVendor(p, 219)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXPONAccessType(i)
+	return
+}
+
+func ERXPONAccessType_Set(p *radius.Packet, value ERXPONAccessType) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 219, a)
+}
+
+func ERXPONAccessType_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 219)
+}
+
+type ERXONTONUAverageDataRateDownstream uint32
+
+var ERXONTONUAverageDataRateDownstream_Strings = map[ERXONTONUAverageDataRateDownstream]string{}
+
+func (a ERXONTONUAverageDataRateDownstream) String() string {
+	if str, ok := ERXONTONUAverageDataRateDownstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXONTONUAverageDataRateDownstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXONTONUAverageDataRateDownstream_Add(p *radius.Packet, value ERXONTONUAverageDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 220, a)
+}
+
+func ERXONTONUAverageDataRateDownstream_Get(p *radius.Packet) (value ERXONTONUAverageDataRateDownstream) {
+	value, _ = ERXONTONUAverageDataRateDownstream_Lookup(p)
+	return
+}
+
+func ERXONTONUAverageDataRateDownstream_Gets(p *radius.Packet) (values []ERXONTONUAverageDataRateDownstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 220) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXONTONUAverageDataRateDownstream(i))
+	}
+	return
+}
+
+func ERXONTONUAverageDataRateDownstream_Lookup(p *radius.Packet) (value ERXONTONUAverageDataRateDownstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 220)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXONTONUAverageDataRateDownstream(i)
+	return
+}
+
+func ERXONTONUAverageDataRateDownstream_Set(p *radius.Packet, value ERXONTONUAverageDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 220, a)
+}
+
+func ERXONTONUAverageDataRateDownstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 220)
+}
+
+type ERXONTONUPeakDataRateDownstream uint32
+
+var ERXONTONUPeakDataRateDownstream_Strings = map[ERXONTONUPeakDataRateDownstream]string{}
+
+func (a ERXONTONUPeakDataRateDownstream) String() string {
+	if str, ok := ERXONTONUPeakDataRateDownstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXONTONUPeakDataRateDownstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXONTONUPeakDataRateDownstream_Add(p *radius.Packet, value ERXONTONUPeakDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 221, a)
+}
+
+func ERXONTONUPeakDataRateDownstream_Get(p *radius.Packet) (value ERXONTONUPeakDataRateDownstream) {
+	value, _ = ERXONTONUPeakDataRateDownstream_Lookup(p)
+	return
+}
+
+func ERXONTONUPeakDataRateDownstream_Gets(p *radius.Packet) (values []ERXONTONUPeakDataRateDownstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 221) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXONTONUPeakDataRateDownstream(i))
+	}
+	return
+}
+
+func ERXONTONUPeakDataRateDownstream_Lookup(p *radius.Packet) (value ERXONTONUPeakDataRateDownstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 221)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXONTONUPeakDataRateDownstream(i)
+	return
+}
+
+func ERXONTONUPeakDataRateDownstream_Set(p *radius.Packet, value ERXONTONUPeakDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 221, a)
+}
+
+func ERXONTONUPeakDataRateDownstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 221)
+}
+
+type ERXONTONUMaximumDataRateUpstream uint32
+
+var ERXONTONUMaximumDataRateUpstream_Strings = map[ERXONTONUMaximumDataRateUpstream]string{}
+
+func (a ERXONTONUMaximumDataRateUpstream) String() string {
+	if str, ok := ERXONTONUMaximumDataRateUpstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXONTONUMaximumDataRateUpstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXONTONUMaximumDataRateUpstream_Add(p *radius.Packet, value ERXONTONUMaximumDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 222, a)
+}
+
+func ERXONTONUMaximumDataRateUpstream_Get(p *radius.Packet) (value ERXONTONUMaximumDataRateUpstream) {
+	value, _ = ERXONTONUMaximumDataRateUpstream_Lookup(p)
+	return
+}
+
+func ERXONTONUMaximumDataRateUpstream_Gets(p *radius.Packet) (values []ERXONTONUMaximumDataRateUpstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 222) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXONTONUMaximumDataRateUpstream(i))
+	}
+	return
+}
+
+func ERXONTONUMaximumDataRateUpstream_Lookup(p *radius.Packet) (value ERXONTONUMaximumDataRateUpstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 222)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXONTONUMaximumDataRateUpstream(i)
+	return
+}
+
+func ERXONTONUMaximumDataRateUpstream_Set(p *radius.Packet, value ERXONTONUMaximumDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 222, a)
+}
+
+func ERXONTONUMaximumDataRateUpstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 222)
+}
+
+type ERXONTONUAssuredDataRateUpstream uint32
+
+var ERXONTONUAssuredDataRateUpstream_Strings = map[ERXONTONUAssuredDataRateUpstream]string{}
+
+func (a ERXONTONUAssuredDataRateUpstream) String() string {
+	if str, ok := ERXONTONUAssuredDataRateUpstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXONTONUAssuredDataRateUpstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXONTONUAssuredDataRateUpstream_Add(p *radius.Packet, value ERXONTONUAssuredDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 223, a)
+}
+
+func ERXONTONUAssuredDataRateUpstream_Get(p *radius.Packet) (value ERXONTONUAssuredDataRateUpstream) {
+	value, _ = ERXONTONUAssuredDataRateUpstream_Lookup(p)
+	return
+}
+
+func ERXONTONUAssuredDataRateUpstream_Gets(p *radius.Packet) (values []ERXONTONUAssuredDataRateUpstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 223) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXONTONUAssuredDataRateUpstream(i))
+	}
+	return
+}
+
+func ERXONTONUAssuredDataRateUpstream_Lookup(p *radius.Packet) (value ERXONTONUAssuredDataRateUpstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 223)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXONTONUAssuredDataRateUpstream(i)
+	return
+}
+
+func ERXONTONUAssuredDataRateUpstream_Set(p *radius.Packet, value ERXONTONUAssuredDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 223, a)
+}
+
+func ERXONTONUAssuredDataRateUpstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 223)
+}
+
+type ERXPONTreeMaximumDataRateUpstream uint32
+
+var ERXPONTreeMaximumDataRateUpstream_Strings = map[ERXPONTreeMaximumDataRateUpstream]string{}
+
+func (a ERXPONTreeMaximumDataRateUpstream) String() string {
+	if str, ok := ERXPONTreeMaximumDataRateUpstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXPONTreeMaximumDataRateUpstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXPONTreeMaximumDataRateUpstream_Add(p *radius.Packet, value ERXPONTreeMaximumDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 224, a)
+}
+
+func ERXPONTreeMaximumDataRateUpstream_Get(p *radius.Packet) (value ERXPONTreeMaximumDataRateUpstream) {
+	value, _ = ERXPONTreeMaximumDataRateUpstream_Lookup(p)
+	return
+}
+
+func ERXPONTreeMaximumDataRateUpstream_Gets(p *radius.Packet) (values []ERXPONTreeMaximumDataRateUpstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 224) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXPONTreeMaximumDataRateUpstream(i))
+	}
+	return
+}
+
+func ERXPONTreeMaximumDataRateUpstream_Lookup(p *radius.Packet) (value ERXPONTreeMaximumDataRateUpstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 224)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXPONTreeMaximumDataRateUpstream(i)
+	return
+}
+
+func ERXPONTreeMaximumDataRateUpstream_Set(p *radius.Packet, value ERXPONTreeMaximumDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 224, a)
+}
+
+func ERXPONTreeMaximumDataRateUpstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 224)
+}
+
+type ERXPONTreeMaximumDataRateDownstream uint32
+
+var ERXPONTreeMaximumDataRateDownstream_Strings = map[ERXPONTreeMaximumDataRateDownstream]string{}
+
+func (a ERXPONTreeMaximumDataRateDownstream) String() string {
+	if str, ok := ERXPONTreeMaximumDataRateDownstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXPONTreeMaximumDataRateDownstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXPONTreeMaximumDataRateDownstream_Add(p *radius.Packet, value ERXPONTreeMaximumDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 225, a)
+}
+
+func ERXPONTreeMaximumDataRateDownstream_Get(p *radius.Packet) (value ERXPONTreeMaximumDataRateDownstream) {
+	value, _ = ERXPONTreeMaximumDataRateDownstream_Lookup(p)
+	return
+}
+
+func ERXPONTreeMaximumDataRateDownstream_Gets(p *radius.Packet) (values []ERXPONTreeMaximumDataRateDownstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 225) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXPONTreeMaximumDataRateDownstream(i))
+	}
+	return
+}
+
+func ERXPONTreeMaximumDataRateDownstream_Lookup(p *radius.Packet) (value ERXPONTreeMaximumDataRateDownstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 225)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXPONTreeMaximumDataRateDownstream(i)
+	return
+}
+
+func ERXPONTreeMaximumDataRateDownstream_Set(p *radius.Packet, value ERXPONTreeMaximumDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 225, a)
+}
+
+func ERXPONTreeMaximumDataRateDownstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 225)
+}
+
+type ERXExpectedThroughputUpstream uint32
+
+var ERXExpectedThroughputUpstream_Strings = map[ERXExpectedThroughputUpstream]string{}
+
+func (a ERXExpectedThroughputUpstream) String() string {
+	if str, ok := ERXExpectedThroughputUpstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXExpectedThroughputUpstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXExpectedThroughputUpstream_Add(p *radius.Packet, value ERXExpectedThroughputUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 226, a)
+}
+
+func ERXExpectedThroughputUpstream_Get(p *radius.Packet) (value ERXExpectedThroughputUpstream) {
+	value, _ = ERXExpectedThroughputUpstream_Lookup(p)
+	return
+}
+
+func ERXExpectedThroughputUpstream_Gets(p *radius.Packet) (values []ERXExpectedThroughputUpstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 226) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXExpectedThroughputUpstream(i))
+	}
+	return
+}
+
+func ERXExpectedThroughputUpstream_Lookup(p *radius.Packet) (value ERXExpectedThroughputUpstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 226)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXExpectedThroughputUpstream(i)
+	return
+}
+
+func ERXExpectedThroughputUpstream_Set(p *radius.Packet, value ERXExpectedThroughputUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 226, a)
+}
+
+func ERXExpectedThroughputUpstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 226)
+}
+
+type ERXExpectedThroughputDownstream uint32
+
+var ERXExpectedThroughputDownstream_Strings = map[ERXExpectedThroughputDownstream]string{}
+
+func (a ERXExpectedThroughputDownstream) String() string {
+	if str, ok := ERXExpectedThroughputDownstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXExpectedThroughputDownstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXExpectedThroughputDownstream_Add(p *radius.Packet, value ERXExpectedThroughputDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 227, a)
+}
+
+func ERXExpectedThroughputDownstream_Get(p *radius.Packet) (value ERXExpectedThroughputDownstream) {
+	value, _ = ERXExpectedThroughputDownstream_Lookup(p)
+	return
+}
+
+func ERXExpectedThroughputDownstream_Gets(p *radius.Packet) (values []ERXExpectedThroughputDownstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 227) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXExpectedThroughputDownstream(i))
+	}
+	return
+}
+
+func ERXExpectedThroughputDownstream_Lookup(p *radius.Packet) (value ERXExpectedThroughputDownstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 227)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXExpectedThroughputDownstream(i)
+	return
+}
+
+func ERXExpectedThroughputDownstream_Set(p *radius.Packet, value ERXExpectedThroughputDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 227, a)
+}
+
+func ERXExpectedThroughputDownstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 227)
+}
+
+type ERXAttainableExpectedThroughputUpstream uint32
+
+var ERXAttainableExpectedThroughputUpstream_Strings = map[ERXAttainableExpectedThroughputUpstream]string{}
+
+func (a ERXAttainableExpectedThroughputUpstream) String() string {
+	if str, ok := ERXAttainableExpectedThroughputUpstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXAttainableExpectedThroughputUpstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXAttainableExpectedThroughputUpstream_Add(p *radius.Packet, value ERXAttainableExpectedThroughputUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 228, a)
+}
+
+func ERXAttainableExpectedThroughputUpstream_Get(p *radius.Packet) (value ERXAttainableExpectedThroughputUpstream) {
+	value, _ = ERXAttainableExpectedThroughputUpstream_Lookup(p)
+	return
+}
+
+func ERXAttainableExpectedThroughputUpstream_Gets(p *radius.Packet) (values []ERXAttainableExpectedThroughputUpstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 228) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXAttainableExpectedThroughputUpstream(i))
+	}
+	return
+}
+
+func ERXAttainableExpectedThroughputUpstream_Lookup(p *radius.Packet) (value ERXAttainableExpectedThroughputUpstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 228)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXAttainableExpectedThroughputUpstream(i)
+	return
+}
+
+func ERXAttainableExpectedThroughputUpstream_Set(p *radius.Packet, value ERXAttainableExpectedThroughputUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 228, a)
+}
+
+func ERXAttainableExpectedThroughputUpstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 228)
+}
+
+type ERXAttainableExpectedThroughputDownstream uint32
+
+var ERXAttainableExpectedThroughputDownstream_Strings = map[ERXAttainableExpectedThroughputDownstream]string{}
+
+func (a ERXAttainableExpectedThroughputDownstream) String() string {
+	if str, ok := ERXAttainableExpectedThroughputDownstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXAttainableExpectedThroughputDownstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXAttainableExpectedThroughputDownstream_Add(p *radius.Packet, value ERXAttainableExpectedThroughputDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 229, a)
+}
+
+func ERXAttainableExpectedThroughputDownstream_Get(p *radius.Packet) (value ERXAttainableExpectedThroughputDownstream) {
+	value, _ = ERXAttainableExpectedThroughputDownstream_Lookup(p)
+	return
+}
+
+func ERXAttainableExpectedThroughputDownstream_Gets(p *radius.Packet) (values []ERXAttainableExpectedThroughputDownstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 229) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXAttainableExpectedThroughputDownstream(i))
+	}
+	return
+}
+
+func ERXAttainableExpectedThroughputDownstream_Lookup(p *radius.Packet) (value ERXAttainableExpectedThroughputDownstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 229)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXAttainableExpectedThroughputDownstream(i)
+	return
+}
+
+func ERXAttainableExpectedThroughputDownstream_Set(p *radius.Packet, value ERXAttainableExpectedThroughputDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 229, a)
+}
+
+func ERXAttainableExpectedThroughputDownstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 229)
+}
+
+type ERXGammaDataRateUpstream uint32
+
+var ERXGammaDataRateUpstream_Strings = map[ERXGammaDataRateUpstream]string{}
+
+func (a ERXGammaDataRateUpstream) String() string {
+	if str, ok := ERXGammaDataRateUpstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXGammaDataRateUpstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXGammaDataRateUpstream_Add(p *radius.Packet, value ERXGammaDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 230, a)
+}
+
+func ERXGammaDataRateUpstream_Get(p *radius.Packet) (value ERXGammaDataRateUpstream) {
+	value, _ = ERXGammaDataRateUpstream_Lookup(p)
+	return
+}
+
+func ERXGammaDataRateUpstream_Gets(p *radius.Packet) (values []ERXGammaDataRateUpstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 230) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXGammaDataRateUpstream(i))
+	}
+	return
+}
+
+func ERXGammaDataRateUpstream_Lookup(p *radius.Packet) (value ERXGammaDataRateUpstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 230)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXGammaDataRateUpstream(i)
+	return
+}
+
+func ERXGammaDataRateUpstream_Set(p *radius.Packet, value ERXGammaDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 230, a)
+}
+
+func ERXGammaDataRateUpstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 230)
+}
+
+type ERXGammaDataRateDownstream uint32
+
+var ERXGammaDataRateDownstream_Strings = map[ERXGammaDataRateDownstream]string{}
+
+func (a ERXGammaDataRateDownstream) String() string {
+	if str, ok := ERXGammaDataRateDownstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXGammaDataRateDownstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXGammaDataRateDownstream_Add(p *radius.Packet, value ERXGammaDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 231, a)
+}
+
+func ERXGammaDataRateDownstream_Get(p *radius.Packet) (value ERXGammaDataRateDownstream) {
+	value, _ = ERXGammaDataRateDownstream_Lookup(p)
+	return
+}
+
+func ERXGammaDataRateDownstream_Gets(p *radius.Packet) (values []ERXGammaDataRateDownstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 231) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXGammaDataRateDownstream(i))
+	}
+	return
+}
+
+func ERXGammaDataRateDownstream_Lookup(p *radius.Packet) (value ERXGammaDataRateDownstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 231)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXGammaDataRateDownstream(i)
+	return
+}
+
+func ERXGammaDataRateDownstream_Set(p *radius.Packet, value ERXGammaDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 231, a)
+}
+
+func ERXGammaDataRateDownstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 231)
+}
+
+type ERXAttainableGammaDataRateUpstream uint32
+
+var ERXAttainableGammaDataRateUpstream_Strings = map[ERXAttainableGammaDataRateUpstream]string{}
+
+func (a ERXAttainableGammaDataRateUpstream) String() string {
+	if str, ok := ERXAttainableGammaDataRateUpstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXAttainableGammaDataRateUpstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXAttainableGammaDataRateUpstream_Add(p *radius.Packet, value ERXAttainableGammaDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 232, a)
+}
+
+func ERXAttainableGammaDataRateUpstream_Get(p *radius.Packet) (value ERXAttainableGammaDataRateUpstream) {
+	value, _ = ERXAttainableGammaDataRateUpstream_Lookup(p)
+	return
+}
+
+func ERXAttainableGammaDataRateUpstream_Gets(p *radius.Packet) (values []ERXAttainableGammaDataRateUpstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 232) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXAttainableGammaDataRateUpstream(i))
+	}
+	return
+}
+
+func ERXAttainableGammaDataRateUpstream_Lookup(p *radius.Packet) (value ERXAttainableGammaDataRateUpstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 232)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXAttainableGammaDataRateUpstream(i)
+	return
+}
+
+func ERXAttainableGammaDataRateUpstream_Set(p *radius.Packet, value ERXAttainableGammaDataRateUpstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 232, a)
+}
+
+func ERXAttainableGammaDataRateUpstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 232)
+}
+
+type ERXAttainableGammaDataRateDownstream uint32
+
+var ERXAttainableGammaDataRateDownstream_Strings = map[ERXAttainableGammaDataRateDownstream]string{}
+
+func (a ERXAttainableGammaDataRateDownstream) String() string {
+	if str, ok := ERXAttainableGammaDataRateDownstream_Strings[a]; ok {
+		return str
+	}
+	return "ERXAttainableGammaDataRateDownstream(" + strconv.FormatUint(uint64(a), 10) + ")"
+}
+
+func ERXAttainableGammaDataRateDownstream_Add(p *radius.Packet, value ERXAttainableGammaDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_AddVendor(p, 233, a)
+}
+
+func ERXAttainableGammaDataRateDownstream_Get(p *radius.Packet) (value ERXAttainableGammaDataRateDownstream) {
+	value, _ = ERXAttainableGammaDataRateDownstream_Lookup(p)
+	return
+}
+
+func ERXAttainableGammaDataRateDownstream_Gets(p *radius.Packet) (values []ERXAttainableGammaDataRateDownstream, err error) {
+	var i uint32
+	for _, attr := range _ERX_GetsVendor(p, 233) {
+		i, err = radius.Integer(attr)
+		if err != nil {
+			return
+		}
+		values = append(values, ERXAttainableGammaDataRateDownstream(i))
+	}
+	return
+}
+
+func ERXAttainableGammaDataRateDownstream_Lookup(p *radius.Packet) (value ERXAttainableGammaDataRateDownstream, err error) {
+	a, ok := _ERX_LookupVendor(p, 233)
+	if !ok {
+		err = radius.ErrNoAttribute
+		return
+	}
+	var i uint32
+	i, err = radius.Integer(a)
+	if err != nil {
+		return
+	}
+	value = ERXAttainableGammaDataRateDownstream(i)
+	return
+}
+
+func ERXAttainableGammaDataRateDownstream_Set(p *radius.Packet, value ERXAttainableGammaDataRateDownstream) (err error) {
+	a := radius.NewInteger(uint32(value))
+	return _ERX_SetVendor(p, 233, a)
+}
+
+func ERXAttainableGammaDataRateDownstream_Del(p *radius.Packet) {
+	_ERX_DelVendor(p, 233)
 }
